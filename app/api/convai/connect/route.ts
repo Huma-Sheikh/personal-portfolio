@@ -14,29 +14,35 @@ export async function POST(req: Request) {
       );
     }
 
+    // SIMPLIFIED: Language is configured in Convai Dashboard, not here
+    const requestBody: any = {
+      character_id: characterId,
+      connection_type: "audio",
+      character_session_id: character_session_id || undefined
+    };
+
+    console.log("🔗 Connecting to Convai (language set in dashboard)");
+
     const resp = await fetch("https://live.convai.com/connect", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "X-API-Key": apiKey,
       },
-      body: JSON.stringify({
-        character_id: characterId,
-        connection_type: "audio",
-        character_session_id: character_session_id || undefined,
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     const data = await resp.json();
 
     if (!resp.ok) {
-      console.error("Convai API error:", data);
+      console.error("❌ Convai API error:", data);
       return NextResponse.json({ error: data }, { status: resp.status });
     }
 
+    console.log("✅ Connected - using character's dashboard language settings");
     return NextResponse.json(data);
   } catch (error: any) {
-    console.error("Server error:", error);
+    console.error("💥 Server error:", error);
     return NextResponse.json(
       { error: error.message || "Internal server error" },
       { status: 500 }
