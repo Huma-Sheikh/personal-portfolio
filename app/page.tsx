@@ -299,7 +299,7 @@ export default function Home() {
           </div>
 
           {/* Language Detection Display */}
-          {status === "connected" && (
+          {/* {status === "connected" && (
             <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-lg">
               <div className="text-center">
                 <div className="text-xs font-semibold text-gray-600 mb-1">
@@ -310,7 +310,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Audio Status */}
           {status === "connected" && (
