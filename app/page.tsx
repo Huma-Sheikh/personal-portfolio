@@ -15,7 +15,7 @@ function Petal({ style }: { style: React.CSSProperties }) {
   return (
     <div style={{
       position: "absolute",
-      background: "linear-gradient(135deg, rgba(255,182,193,0.6), rgba(255,105,180,0.3))",
+      background: "linear-gradient(135deg, rgba(218,165,32,0.55), rgba(255,215,0,0.25))",
       borderRadius: "60% 40% 60% 40% / 50% 60% 40% 50%",
       pointerEvents: "none",
       ...style,
@@ -87,36 +87,36 @@ function GirlAvatar({
           <stop offset="100%" stopColor="#f0b090" />
         </radialGradient>
         <linearGradient id="hair" x1="0%" y1="0%" x2="80%" y2="100%">
-          <stop offset="0%" stopColor="#2c1654" />
-          <stop offset="50%" stopColor="#1a0a2e" />
-          <stop offset="100%" stopColor="#0d0618" />
+          <stop offset="0%" stopColor="#5c3a00" />
+          <stop offset="50%" stopColor="#3d2600" />
+          <stop offset="100%" stopColor="#1a1000" />
         </linearGradient>
         <linearGradient id="hairShine" x1="20%" y1="0%" x2="60%" y2="50%">
-          <stop offset="0%" stopColor="rgba(255,182,213,0.35)" />
-          <stop offset="100%" stopColor="rgba(255,182,213,0)" />
+          <stop offset="0%" stopColor="rgba(255,215,0,0.3)" />
+          <stop offset="100%" stopColor="rgba(255,215,0,0)" />
         </linearGradient>
         <radialGradient id="iris" cx="40%" cy="35%" r="55%">
-          <stop offset="0%" stopColor="#ff9eb5" />
-          <stop offset="40%" stopColor="#c2185b" />
-          <stop offset="100%" stopColor="#6a0036" />
+          <stop offset="0%" stopColor="#ffd700" />
+          <stop offset="40%" stopColor="#b8860b" />
+          <stop offset="100%" stopColor="#6b4c00" />
         </radialGradient>
         <radialGradient id="irisSpeak" cx="40%" cy="35%" r="55%">
-          <stop offset="0%" stopColor="#ffcce0" />
-          <stop offset="40%" stopColor="#ff69b4" />
-          <stop offset="100%" stopColor="#9c1560" />
+          <stop offset="0%" stopColor="#ffe066" />
+          <stop offset="40%" stopColor="#daa520" />
+          <stop offset="100%" stopColor="#8b6500" />
         </radialGradient>
         <linearGradient id="dress" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#7b1fa2" />
-          <stop offset="100%" stopColor="#ad1457" />
+          <stop offset="0%" stopColor="#c8860a" />
+          <stop offset="100%" stopColor="#8b6500" />
         </linearGradient>
         <linearGradient id="dressShimmer" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stopColor="rgba(255,255,255,0)" />
-          <stop offset="50%" stopColor="rgba(255,255,255,0.12)" />
+          <stop offset="50%" stopColor="rgba(255,255,255,0.15)" />
           <stop offset="100%" stopColor="rgba(255,255,255,0)" />
         </linearGradient>
         <radialGradient id="gem" cx="50%" cy="30%" r="60%">
-          <stop offset="0%" stopColor="#ff9eb5" />
-          <stop offset="100%" stopColor="#ad1457" />
+          <stop offset="0%" stopColor="#ffe566" />
+          <stop offset="100%" stopColor="#b8860b" />
         </radialGradient>
         <filter id="softGlow">
           <feGaussianBlur stdDeviation="1.5" result="blur" />
@@ -132,7 +132,7 @@ function GirlAvatar({
       <ellipse cx="61" cy="130" rx="38" ry="20" fill="url(#dress)" />
       <rect x="23" y="110" width="76" height="28" rx="10" fill="url(#dress)" />
       <rect x="23" y="110" width="76" height="28" rx="10" fill="url(#dressShimmer)" />
-      <path d="M 48 108 Q 61 118 74 108" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      <path d="M 48 108 Q 61 118 74 108" stroke="rgba(255,255,255,0.25)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
 
       {/* Long Hair Back */}
       <path d="M 22 42 Q 12 70 16 105 Q 18 120 28 128 L 34 110 Q 26 95 28 72 Q 28 55 34 40 Z" fill="url(#hair)" />
@@ -151,28 +151,28 @@ function GirlAvatar({
 
       {/* Earrings */}
       <circle cx="26" cy="58" r="3" fill="url(#gem)" filter="url(#softGlow)" />
-      <line x1="26" y1="61" x2="26" y2="67" stroke="#ad1457" strokeWidth="1.5" />
+      <line x1="26" y1="61" x2="26" y2="67" stroke="#b8860b" strokeWidth="1.5" />
       <circle cx="26" cy="69" r="4" fill="url(#gem)" filter="url(#softGlow)" />
       <circle cx="96" cy="58" r="3" fill="url(#gem)" filter="url(#softGlow)" />
-      <line x1="96" y1="61" x2="96" y2="67" stroke="#ad1457" strokeWidth="1.5" />
+      <line x1="96" y1="61" x2="96" y2="67" stroke="#b8860b" strokeWidth="1.5" />
       <circle cx="96" cy="69" r="4" fill="url(#gem)" filter="url(#softGlow)" />
 
       {/* Eyebrows */}
-      <path d={connected ? "M 36 37 Q 44 31 52 35" : "M 36 38 Q 44 33 52 36"} stroke="#3d1a2a" strokeWidth="2" strokeLinecap="round" fill="none" />
-      <path d={connected ? "M 70 35 Q 78 31 86 37" : "M 70 36 Q 78 33 86 38"} stroke="#3d1a2a" strokeWidth="2" strokeLinecap="round" fill="none" />
+      <path d={connected ? "M 36 37 Q 44 31 52 35" : "M 36 38 Q 44 33 52 36"} stroke="#3d2600" strokeWidth="2" strokeLinecap="round" fill="none" />
+      <path d={connected ? "M 70 35 Q 78 31 86 37" : "M 70 36 Q 78 33 86 38"} stroke="#3d2600" strokeWidth="2" strokeLinecap="round" fill="none" />
 
       {/* Eyes */}
       <ellipse cx={44 + eyeDir.x * 0.3} cy={48 + eyeDir.y * 0.3} rx="9.5" ry={9 * blinkY} fill="white" />
       <ellipse cx={78 + eyeDir.x * 0.3} cy={48 + eyeDir.y * 0.3} rx="9.5" ry={9 * blinkY} fill="white" />
       <ellipse cx={44 + eyeDir.x} cy={48 + eyeDir.y} rx="6" ry={6 * blinkY} fill={isSpeaking ? "url(#irisSpeak)" : "url(#iris)"} filter={isSpeaking ? "url(#softGlow)" : undefined} />
       <ellipse cx={78 + eyeDir.x} cy={48 + eyeDir.y} rx="6" ry={6 * blinkY} fill={isSpeaking ? "url(#irisSpeak)" : "url(#iris)"} filter={isSpeaking ? "url(#softGlow)" : undefined} />
-      <circle cx={44 + eyeDir.x} cy={48 + eyeDir.y} r={2.8 * blinkY} fill="#1a0010" />
-      <circle cx={78 + eyeDir.x} cy={48 + eyeDir.y} r={2.8 * blinkY} fill="#1a0010" />
+      <circle cx={44 + eyeDir.x} cy={48 + eyeDir.y} r={2.8 * blinkY} fill="#1a1000" />
+      <circle cx={78 + eyeDir.x} cy={48 + eyeDir.y} r={2.8 * blinkY} fill="#1a1000" />
       <circle cx={46 + eyeDir.x} cy={46 + eyeDir.y} r={1.4 * blinkY} fill="white" opacity="0.9" />
       <circle cx={80 + eyeDir.x} cy={46 + eyeDir.y} r={1.4 * blinkY} fill="white" opacity="0.9" />
       {/* Lashes */}
-      <path d={`M 35 ${48 - 9 * blinkY} Q 44 ${44 - 9 * blinkY} 53 ${48 - 9 * blinkY}`} stroke="#1a0010" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity={blinkY} />
-      <path d={`M 69 ${48 - 9 * blinkY} Q 78 ${44 - 9 * blinkY} 87 ${48 - 9 * blinkY}`} stroke="#1a0010" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity={blinkY} />
+      <path d={`M 35 ${48 - 9 * blinkY} Q 44 ${44 - 9 * blinkY} 53 ${48 - 9 * blinkY}`} stroke="#1a1000" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity={blinkY} />
+      <path d={`M 69 ${48 - 9 * blinkY} Q 78 ${44 - 9 * blinkY} 87 ${48 - 9 * blinkY}`} stroke="#1a1000" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity={blinkY} />
 
       {/* Nose */}
       <path d="M 61 55 Q 58 62 59 64 Q 61 66 63 64 Q 64 62 61 55" fill="#d4906a" opacity="0.35" />
@@ -181,21 +181,21 @@ function GirlAvatar({
       {/* Mouth */}
       {mouthOpen > 0.06 ? (
         <>
-          <ellipse cx="61" cy={mouthCY} rx="9.5" ry={Math.max(1.5, mouthH / 2)} fill="#2d0a1a" />
-          <path d={`M 51.5 ${mouthCY - mouthH / 2} Q 57 ${mouthCY - mouthH / 2 - 4} 61 ${mouthCY - mouthH / 2 - 3} Q 65 ${mouthCY - mouthH / 2 - 4} 70.5 ${mouthCY - mouthH / 2}`} stroke="#e57090" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-          <path d={`M 51.5 ${mouthCY + mouthH / 2} Q 61 ${mouthCY + mouthH / 2 + 4} 70.5 ${mouthCY + mouthH / 2}`} stroke="#e57090" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+          <ellipse cx="61" cy={mouthCY} rx="9.5" ry={Math.max(1.5, mouthH / 2)} fill="#3d1a00" />
+          <path d={`M 51.5 ${mouthCY - mouthH / 2} Q 57 ${mouthCY - mouthH / 2 - 4} 61 ${mouthCY - mouthH / 2 - 3} Q 65 ${mouthCY - mouthH / 2 - 4} 70.5 ${mouthCY - mouthH / 2}`} stroke="#c87020" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+          <path d={`M 51.5 ${mouthCY + mouthH / 2} Q 61 ${mouthCY + mouthH / 2 + 4} 70.5 ${mouthCY + mouthH / 2}`} stroke="#c87020" strokeWidth="1.5" fill="none" strokeLinecap="round" />
           {mouthOpen > 0.3 && <rect x="55" y={mouthCY - mouthH / 2 + 1} width="12" height={Math.min(5, mouthH - 2)} rx="2" fill="white" opacity="0.85" />}
         </>
       ) : (
         <>
-          <path d={`M 52 68 Q 57 65.5 61 67 Q 65 65.5 70 68 Q 64 ${connected ? 74 : 72} 61 ${connected ? 74.5 : 72.5} Q 58 ${connected ? 74 : 72} 52 68 Z`} fill="#e57090" opacity="0.85" />
-          <path d="M 52 68 Q 57 65.5 61 67 Q 65 65.5 70 68" stroke="#c2406a" strokeWidth="1" fill="none" />
+          <path d={`M 52 68 Q 57 65.5 61 67 Q 65 65.5 70 68 Q 64 ${connected ? 74 : 72} 61 ${connected ? 74.5 : 72.5} Q 58 ${connected ? 74 : 72} 52 68 Z`} fill="#c87020" opacity="0.85" />
+          <path d="M 52 68 Q 57 65.5 61 67 Q 65 65.5 70 68" stroke="#8b5e00" strokeWidth="1" fill="none" />
         </>
       )}
 
       {/* Blush */}
-      <ellipse cx="34" cy="62" rx="8" ry="5" fill="#ffb3c6" opacity="0.35" />
-      <ellipse cx="88" cy="62" rx="8" ry="5" fill="#ffb3c6" opacity="0.35" />
+      <ellipse cx="34" cy="62" rx="8" ry="5" fill="#f4a460" opacity="0.28" />
+      <ellipse cx="88" cy="62" rx="8" ry="5" fill="#f4a460" opacity="0.28" />
 
       {/* Forehead highlight */}
       <ellipse cx="55" cy="36" rx="12" ry="7" fill="rgba(255,255,255,0.08)" />
@@ -203,10 +203,10 @@ function GirlAvatar({
       {/* Speaking sparkles */}
       {isSpeaking && (
         <>
-          <circle cx="20" cy="50" r="2" fill="#ff69b4" opacity="0.7" filter="url(#softGlow)" />
-          <circle cx="102" cy="45" r="1.5" fill="#ffb3c6" opacity="0.6" filter="url(#softGlow)" />
-          <circle cx="15" cy="70" r="1.5" fill="#c71585" opacity="0.5" />
-          <circle cx="107" cy="65" r="2" fill="#ff69b4" opacity="0.6" filter="url(#softGlow)" />
+          <circle cx="20" cy="50" r="2" fill="#ffd700" opacity="0.7" filter="url(#softGlow)" />
+          <circle cx="102" cy="45" r="1.5" fill="#ffe566" opacity="0.6" filter="url(#softGlow)" />
+          <circle cx="15" cy="70" r="1.5" fill="#daa520" opacity="0.5" />
+          <circle cx="107" cy="65" r="2" fill="#ffd700" opacity="0.6" filter="url(#softGlow)" />
         </>
       )}
     </svg>
@@ -220,11 +220,16 @@ function SoundWave({ active, color1, color2 }: { active: boolean; color1: string
     <div style={{ display: "flex", alignItems: "center", gap: 2.5, height: 32 }}>
       {bars.map((h, i) => (
         <div key={i} style={{
-          width: 3, borderRadius: 3,
+          width: 3,
+          borderRadius: 3,
           background: `linear-gradient(to top, ${color1}, ${color2})`,
           height: active ? `${h * 100}%` : "15%",
           opacity: active ? 0.9 : 0.25,
-          animation: active ? `waveBar ${0.45 + (i % 5) * 0.12}s ease-in-out infinite alternate` : "none",
+          animationName: active ? "waveBar" : "none",
+          animationDuration: `${0.45 + (i % 5) * 0.12}s`,
+          animationTimingFunction: "ease-in-out",
+          animationIterationCount: "infinite",
+          animationDirection: "alternate",
           animationDelay: `${i * 0.04}s`,
           transition: "height 0.3s ease, opacity 0.3s ease",
         }} />
@@ -270,7 +275,7 @@ export default function Home() {
       delay: Math.random() * 12,
       duration: 10 + Math.random() * 12,
       size: 6 + Math.random() * 10,
-      opacity: 0.15 + Math.random() * 0.35,
+      opacity: 0.12 + Math.random() * 0.3,
     })));
   }, []);
 
@@ -287,7 +292,7 @@ export default function Home() {
     setLastUserText("");
 
     try {
-      addLog("🌸 Waking up Huma...");
+      addLog("✦ Waking up Huma...");
       const connectResp = await fetch("/api/convai/connect", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -311,13 +316,18 @@ export default function Home() {
         if (track.kind === Track.Kind.Audio) {
           try {
             const el = track.attach() as HTMLAudioElement;
-            el.autoplay = true; el.volume = 1.0; el.muted = false; el.style.display = "none";
+            el.autoplay = true;
+            el.volume = 1.0;
+            el.muted = false;
+            el.style.display = "none";
             document.body.appendChild(el);
-            try { await el.play(); setIsSpeaking(true); }
-            catch {
-              const enable = async () => { await el.play().catch(() => { }); setIsSpeaking(true); document.removeEventListener("click", enable); };
-              document.addEventListener("click", enable);
-            }
+
+            // Resume AudioContext — key fix for browser autoplay policy
+            await livekit.startAudio();
+
+            try { await el.play(); } catch { /* handled by startAudio */ }
+
+            setIsSpeaking(true);
             el.onplay = () => setIsSpeaking(true);
             el.onended = () => setIsSpeaking(false);
             el.onpause = () => setIsSpeaking(false);
@@ -360,7 +370,7 @@ export default function Home() {
       localTrackRef.current = localAudioTrack;
       await room.localParticipant.publishTrack(localAudioTrack, { dtx: false, source: Track.Source.Microphone });
 
-      addLog("🌸 Say hello to Huma! ✨");
+      addLog("✦ Say hello to Huma! ✨");
       setStatus("connected");
       setIsListening(true);
     } catch (e: any) {
@@ -374,7 +384,7 @@ export default function Home() {
   }
 
   async function stopCall() {
-    addLog("🌙 Goodbye...");
+    addLog("✦ Goodbye...");
     localTrackRef.current?.stop(); localTrackRef.current = null;
     remoteAudioElements.current.forEach((el) => { el.pause(); el.remove(); });
     remoteAudioElements.current = [];
@@ -391,16 +401,16 @@ export default function Home() {
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-          background: #0d0418;
+          background: #1a1200;
           font-family: 'Cormorant Garamond', Georgia, serif;
-          color: #f5d5e8;
+          color: #f5ecd0;
           overflow-x: hidden;
         }
 
         @keyframes petalFall {
           0%   { transform: translateY(-5vh) rotate(0deg) translateX(0px); opacity: 0; }
           10%  { opacity: 1; }
-          90%  { opacity: 0.6; }
+          90%  { opacity: 0.5; }
           100% { transform: translateY(105vh) rotate(540deg) translateX(60px); opacity: 0; }
         }
 
@@ -428,8 +438,8 @@ export default function Home() {
         }
 
         @keyframes starTwinkle {
-          0%, 100% { opacity: 0.15; transform: scale(0.8); }
-          50%       { opacity: 0.8;  transform: scale(1.2); }
+          0%, 100% { opacity: 0.1;  transform: scale(0.8); }
+          50%       { opacity: 0.65; transform: scale(1.2); }
         }
 
         @keyframes gradientShift {
@@ -446,11 +456,11 @@ export default function Home() {
         .bubble-in { animation: fadeSlideUp 0.45s cubic-bezier(0.22,1,0.36,1) forwards; }
 
         .btn-start {
-          background: linear-gradient(135deg, #e91e8c, #9c27b0, #e91e8c);
+          background: linear-gradient(135deg, #daa520, #f5c842, #daa520);
           background-size: 200%;
           animation: gradientShift 3s ease infinite;
           border: none;
-          color: white;
+          color: #1a1200;
           font-family: 'Cormorant Garamond', serif;
           font-size: 1.15rem;
           font-weight: 700;
@@ -466,19 +476,19 @@ export default function Home() {
         .btn-start::after {
           content: '';
           position: absolute; inset: 0;
-          background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+          background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.28) 50%, transparent 100%);
           background-size: 200%;
           animation: shimmerMove 2.5s linear infinite;
           border-radius: inherit;
         }
-        .btn-start:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(233,30,140,0.55); }
+        .btn-start:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(218,165,32,0.5); }
         .btn-start:active { transform: translateY(-1px); }
-        .btn-start:disabled { opacity: 0.5; cursor: not-allowed; transform: none; animation: none; background: #4a2060; }
+        .btn-start:disabled { opacity: 0.5; cursor: not-allowed; transform: none; animation: none; background: #3a2e00; color: #6b5a00; }
 
         .btn-end {
           background: transparent;
-          border: 2px solid rgba(220,50,90,0.55);
-          color: #ff8fa8;
+          border: 2px solid rgba(218,165,32,0.5);
+          color: #daa520;
           font-family: 'Cormorant Garamond', serif;
           font-size: 1.1rem;
           font-weight: 600;
@@ -490,21 +500,24 @@ export default function Home() {
           transition: all 0.25s;
         }
         .btn-end:hover {
-          background: rgba(220,50,90,0.12);
-          border-color: rgba(220,50,90,0.85);
-          box-shadow: 0 0 24px rgba(220,50,90,0.3);
+          background: rgba(218,165,32,0.1);
+          border-color: rgba(218,165,32,0.9);
+          box-shadow: 0 0 24px rgba(218,165,32,0.28);
           transform: translateY(-2px);
         }
       `}</style>
 
       {/* ── Background ── */}
-      <div style={{ position: "fixed", inset: 0, zIndex: 0, overflow: "hidden", background: "radial-gradient(ellipse at 25% 20%, #1a0535 0%, #0d0418 50%, #0a021a 100%)" }}>
-        {/* Glow blobs */}
-        <div style={{ position: "absolute", top: "-15%", left: "-5%", width: 700, height: 700, background: "radial-gradient(circle, rgba(156,21,101,0.18) 0%, transparent 65%)", borderRadius: "50%" }} />
-        <div style={{ position: "absolute", bottom: "-20%", right: "-10%", width: 600, height: 600, background: "radial-gradient(circle, rgba(103,0,180,0.14) 0%, transparent 65%)", borderRadius: "50%" }} />
-        <div style={{ position: "absolute", top: "35%", left: "55%", width: 400, height: 400, background: "radial-gradient(circle, rgba(233,30,140,0.07) 0%, transparent 65%)", borderRadius: "50%" }} />
+      <div style={{
+        position: "fixed", inset: 0, zIndex: 0, overflow: "hidden",
+        background: "radial-gradient(ellipse at 25% 20%, #2a1f00 0%, #1a1200 55%, #0d0a00 100%)"
+      }}>
+        {/* Warm glow blobs */}
+        <div style={{ position: "absolute", top: "-15%", left: "-5%", width: 700, height: 700, background: "radial-gradient(circle, rgba(184,134,11,0.14) 0%, transparent 65%)", borderRadius: "50%" }} />
+        <div style={{ position: "absolute", bottom: "-20%", right: "-10%", width: 600, height: 600, background: "radial-gradient(circle, rgba(139,100,0,0.11) 0%, transparent 65%)", borderRadius: "50%" }} />
+        <div style={{ position: "absolute", top: "35%", left: "55%", width: 400, height: 400, background: "radial-gradient(circle, rgba(218,165,32,0.05) 0%, transparent 65%)", borderRadius: "50%" }} />
 
-        {/* Stars */}
+        {/* Stars — some gold-tinted */}
         {[...Array(35)].map((_, i) => (
           <div key={i} style={{
             position: "absolute",
@@ -513,14 +526,17 @@ export default function Home() {
             width: (i % 3) + 1,
             height: (i % 3) + 1,
             borderRadius: "50%",
-            background: "white",
-            opacity: 0.1 + (i % 5) * 0.08,
-            animation: `starTwinkle ${2 + (i % 4)}s ease-in-out infinite`,
+            background: i % 3 === 0 ? "#ffd700" : "rgba(255,248,220,0.9)",
+            opacity: 0.07 + (i % 5) * 0.07,
+            animationName: "starTwinkle",
+            animationDuration: `${2 + (i % 4)}s`,
+            animationTimingFunction: "ease-in-out",
+            animationIterationCount: "infinite",
             animationDelay: `${(i * 0.3) % 4}s`,
           }} />
         ))}
 
-        {/* Petals */}
+        {/* Mustard gold petals */}
         {petals.map((p) => (
           <Petal key={p.id} style={{
             left: `${p.left}%`,
@@ -538,7 +554,7 @@ export default function Home() {
 
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 28 }}>
-          <div style={{ fontFamily: "'Courier Prime', monospace", fontSize: 10.5, letterSpacing: "0.4em", color: "#6b3a5a", marginBottom: 10, textTransform: "uppercase" }}>
+          <div style={{ fontFamily: "'Courier Prime', monospace", fontSize: 10.5, letterSpacing: "0.42em", color: "#6b5500", marginBottom: 10, textTransform: "uppercase" }}>
             ✦ Portfolio Assistant ✦
           </div>
           <h1 style={{
@@ -546,7 +562,7 @@ export default function Home() {
             fontWeight: 300,
             fontStyle: "italic",
             letterSpacing: "0.04em",
-            background: "linear-gradient(135deg, #ffd6e8 0%, #ff69b4 40%, #e91e8c 70%, #ffb3c6 100%)",
+            background: "linear-gradient(135deg, #fff8e1 0%, #ffd700 35%, #daa520 65%, #f5e6a0 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             lineHeight: 1.1,
@@ -554,33 +570,34 @@ export default function Home() {
           }}>
             Huma Shafique
           </h1>
-          <p style={{ color: "#6b3a5a", fontSize: "1rem", fontStyle: "italic", letterSpacing: "0.08em" }}>
+          <p style={{ color: "#7a6530", fontSize: "1rem", fontStyle: "italic", letterSpacing: "0.08em" }}>
             ask me anything, darling ♡
           </p>
         </div>
 
         {/* Main Card */}
         <div style={{
-          background: "rgba(18, 5, 35, 0.92)",
+          background: "rgba(16, 12, 0, 0.94)",
           backdropFilter: "blur(28px)",
           WebkitBackdropFilter: "blur(28px)",
-          border: "1px solid rgba(255,100,160,0.18)",
+          border: "1px solid rgba(218,165,32,0.18)",
           borderRadius: 32,
           padding: "36px 28px 28px",
           width: "100%",
           maxWidth: 480,
-          boxShadow: "0 40px 100px rgba(0,0,0,0.75), 0 0 80px rgba(156,21,101,0.1), inset 0 1px 0 rgba(255,180,213,0.08)",
+          boxShadow: "0 40px 100px rgba(0,0,0,0.82), 0 0 80px rgba(184,134,11,0.07), inset 0 1px 0 rgba(255,215,0,0.06)",
           position: "relative",
           overflow: "hidden",
         }}>
 
-          {/* Top shimmer */}
-          <div style={{ position: "absolute", top: 0, left: "5%", right: "5%", height: 1, background: "linear-gradient(90deg, transparent, rgba(255,105,180,0.65), rgba(255,182,193,0.45), transparent)" }} />
+          {/* Top shimmer line */}
+          <div style={{ position: "absolute", top: 0, left: "5%", right: "5%", height: 1, background: "linear-gradient(90deg, transparent, rgba(218,165,32,0.75), rgba(255,215,0,0.4), transparent)" }} />
+
           {/* Corner accents */}
-          <div style={{ position: "absolute", top: 16, left: 16, width: 20, height: 20, borderTop: "1.5px solid rgba(255,100,160,0.35)", borderLeft: "1.5px solid rgba(255,100,160,0.35)", borderRadius: "4px 0 0 0" }} />
-          <div style={{ position: "absolute", top: 16, right: 16, width: 20, height: 20, borderTop: "1.5px solid rgba(255,100,160,0.35)", borderRight: "1.5px solid rgba(255,100,160,0.35)", borderRadius: "0 4px 0 0" }} />
-          <div style={{ position: "absolute", bottom: 16, left: 16, width: 20, height: 20, borderBottom: "1.5px solid rgba(255,100,160,0.2)", borderLeft: "1.5px solid rgba(255,100,160,0.2)", borderRadius: "0 0 0 4px" }} />
-          <div style={{ position: "absolute", bottom: 16, right: 16, width: 20, height: 20, borderBottom: "1.5px solid rgba(255,100,160,0.2)", borderRight: "1.5px solid rgba(255,100,160,0.2)", borderRadius: "0 0 4px 0" }} />
+          <div style={{ position: "absolute", top: 16, left: 16, width: 20, height: 20, borderTop: "1.5px solid rgba(218,165,32,0.38)", borderLeft: "1.5px solid rgba(218,165,32,0.38)", borderRadius: "4px 0 0 0" }} />
+          <div style={{ position: "absolute", top: 16, right: 16, width: 20, height: 20, borderTop: "1.5px solid rgba(218,165,32,0.38)", borderRight: "1.5px solid rgba(218,165,32,0.38)", borderRadius: "0 4px 0 0" }} />
+          <div style={{ position: "absolute", bottom: 16, left: 16, width: 20, height: 20, borderBottom: "1.5px solid rgba(218,165,32,0.18)", borderLeft: "1.5px solid rgba(218,165,32,0.18)", borderRadius: "0 0 0 4px" }} />
+          <div style={{ position: "absolute", bottom: 16, right: 16, width: 20, height: 20, borderBottom: "1.5px solid rgba(218,165,32,0.18)", borderRight: "1.5px solid rgba(218,165,32,0.18)", borderRadius: "0 0 4px 0" }} />
 
           {/* ── Avatar ── */}
           <div style={{ display: "flex", justifyContent: "center", marginBottom: 24, position: "relative" }}>
@@ -590,7 +607,7 @@ export default function Home() {
               {isSpeaking && (
                 <div style={{
                   position: "absolute", inset: -22, borderRadius: "50%",
-                  border: "2px solid rgba(255,105,180,0.45)",
+                  border: "2px solid rgba(218,165,32,0.48)",
                   animation: "burstOut 1.8s ease-out infinite",
                 }} />
               )}
@@ -598,14 +615,17 @@ export default function Home() {
               {/* Orbit 1 — CW */}
               <div style={{
                 position: "absolute", inset: -10, borderRadius: "50%",
-                border: "1px dashed rgba(255,100,160,0.32)",
-                animation: `orbitCW ${isSpeaking ? "2.5s" : "7s"} linear infinite`,
+                border: "1px dashed rgba(218,165,32,0.32)",
+                animationName: "orbitCW",
+                animationDuration: isSpeaking ? "2.5s" : "7s",
+                animationTimingFunction: "linear",
+                animationIterationCount: "infinite",
               }}>
                 <div style={{
                   position: "absolute", top: -5, left: "50%", transform: "translateX(-50%)",
                   width: 9, height: 9, borderRadius: "50%",
-                  background: isSpeaking ? "#ff69b4" : "rgba(255,105,180,0.45)",
-                  boxShadow: `0 0 ${isSpeaking ? "14px" : "6px"} #ff69b4`,
+                  background: isSpeaking ? "#ffd700" : "rgba(218,165,32,0.5)",
+                  boxShadow: `0 0 ${isSpeaking ? "14px" : "6px"} #daa520`,
                   transition: "all 0.5s",
                 }} />
               </div>
@@ -613,39 +633,48 @@ export default function Home() {
               {/* Orbit 2 — CCW */}
               <div style={{
                 position: "absolute", inset: -26, borderRadius: "50%",
-                border: "1px solid rgba(156,21,101,0.18)",
-                animation: `orbitCCW ${isSpeaking ? "4s" : "11s"} linear infinite`,
+                border: "1px solid rgba(139,100,0,0.18)",
+                animationName: "orbitCCW",
+                animationDuration: isSpeaking ? "4s" : "11s",
+                animationTimingFunction: "linear",
+                animationIterationCount: "infinite",
               }}>
                 <div style={{
                   position: "absolute", bottom: -4, left: "50%", transform: "translateX(-50%)",
                   width: 6, height: 6, borderRadius: "50%",
-                  background: "#9c1565", boxShadow: "0 0 8px #9c1565",
+                  background: "#b8860b", boxShadow: "0 0 8px #b8860b",
                 }} />
               </div>
 
               {/* Orbit 3 — CW slow */}
               <div style={{
                 position: "absolute", inset: -10, borderRadius: "50%",
-                animation: `orbitCW ${isSpeaking ? "3.5s" : "10s"} linear infinite`,
+                animationName: "orbitCW",
+                animationDuration: isSpeaking ? "3.5s" : "10s",
+                animationTimingFunction: "linear",
+                animationIterationCount: "infinite",
               }}>
                 <div style={{
                   position: "absolute", left: -3, top: "50%", transform: "translateY(-50%)",
                   width: 5, height: 5, borderRadius: "50%",
-                  background: "rgba(255,182,213,0.55)", boxShadow: "0 0 6px #ffb3c6",
+                  background: "rgba(255,236,150,0.55)", boxShadow: "0 0 6px #ffd700",
                 }} />
               </div>
 
               {/* Main avatar circle */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
-                background: "radial-gradient(circle at 38% 32%, #1e0535, #0a0118)",
-                border: `1.5px solid ${isSpeaking ? "rgba(255,105,180,0.65)" : isListening ? "rgba(255,100,160,0.42)" : "rgba(80,10,50,0.4)"}`,
+                background: "radial-gradient(circle at 38% 32%, #1c1500, #080600)",
+                border: `1.5px solid ${isSpeaking ? "rgba(218,165,32,0.68)" : isListening ? "rgba(218,165,32,0.42)" : "rgba(70,55,0,0.38)"}`,
                 boxShadow: isSpeaking
-                  ? "0 0 40px rgba(255,105,180,0.35), inset 0 0 20px rgba(233,30,140,0.07)"
+                  ? "0 0 42px rgba(218,165,32,0.28), inset 0 0 20px rgba(184,134,11,0.07)"
                   : isListening
-                    ? "0 0 22px rgba(255,100,160,0.18)"
+                    ? "0 0 22px rgba(218,165,32,0.14)"
                     : "0 0 20px rgba(0,0,0,0.5)",
-                animation: (isListening || isSpeaking) ? "ringBreath 2.2s ease-in-out infinite" : "none",
+                animationName: (isListening || isSpeaking) ? "ringBreath" : "none",
+                animationDuration: "2.2s",
+                animationTimingFunction: "ease-in-out",
+                animationIterationCount: "infinite",
                 overflow: "hidden",
                 transition: "border-color 0.5s, box-shadow 0.5s",
               }}>
@@ -661,16 +690,18 @@ export default function Home() {
             <div style={{
               display: "inline-flex", alignItems: "center", gap: 8,
               padding: "6px 20px", borderRadius: 20,
-              background: "rgba(8,2,20,0.8)",
-              border: "1px solid rgba(255,100,160,0.15)",
+              background: "rgba(8, 6, 0, 0.88)",
+              border: "1px solid rgba(218,165,32,0.13)",
             }}>
               <div style={{
                 width: 7, height: 7, borderRadius: "50%",
-                background: status === "connected" ? "#ff69b4" : status === "connecting" ? "#ffb3c6" : status === "error" ? "#f44" : "#3a1040",
-                boxShadow: status === "connected" ? "0 0 10px #ff69b4" : status === "connecting" ? "0 0 10px #ffb3c6" : "none",
-                animation: status === "connecting" ? "ringBreath 0.8s infinite" : "none",
+                background: status === "connected" ? "#daa520" : status === "connecting" ? "#f5c842" : status === "error" ? "#cc4400" : "#2e2400",
+                boxShadow: status === "connected" ? "0 0 10px #daa520" : status === "connecting" ? "0 0 10px #f5c842" : "none",
+                animationName: status === "connecting" ? "ringBreath" : "none",
+                animationDuration: "0.8s",
+                animationIterationCount: "infinite",
               }} />
-              <span style={{ fontFamily: "'Courier Prime', monospace", fontSize: 11, color: "#6b3a5a", letterSpacing: "0.08em" }}>
+              <span style={{ fontFamily: "'Courier Prime', monospace", fontSize: 11, color: "#5c4800", letterSpacing: "0.08em" }}>
                 {status === "idle" ? "ready when you are" :
                   status === "connecting" ? "waking up..." :
                     status === "error" ? "something went wrong" :
@@ -684,13 +715,13 @@ export default function Home() {
           {status === "connected" && (
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 28, marginBottom: 18 }}>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
-                <SoundWave active={isListening} color1="#9c1565" color2="#ffb3c6" />
-                <span style={{ fontFamily: "'Courier Prime', monospace", fontSize: 9, color: "#4a2050", letterSpacing: "0.2em", textTransform: "uppercase" }}>you</span>
+                <SoundWave active={isListening} color1="#7a5c00" color2="#daa520" />
+                <span style={{ fontFamily: "'Courier Prime', monospace", fontSize: 9, color: "#3d3000", letterSpacing: "0.2em", textTransform: "uppercase" }}>you</span>
               </div>
-              <div style={{ fontSize: 14, color: "rgba(255,100,160,0.25)" }}>✦</div>
+              <div style={{ fontSize: 14, color: "rgba(218,165,32,0.28)" }}>✦</div>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
-                <SoundWave active={isSpeaking} color1="#e91e8c" color2="#ffd6e8" />
-                <span style={{ fontFamily: "'Courier Prime', monospace", fontSize: 9, color: "#4a2050", letterSpacing: "0.2em", textTransform: "uppercase" }}>huma</span>
+                <SoundWave active={isSpeaking} color1="#daa520" color2="#fff8dc" />
+                <span style={{ fontFamily: "'Courier Prime', monospace", fontSize: 9, color: "#3d3000", letterSpacing: "0.2em", textTransform: "uppercase" }}>huma</span>
               </div>
             </div>
           )}
@@ -699,12 +730,12 @@ export default function Home() {
           {lastBotText && status === "connected" && (
             <div className="bubble-in" style={{
               marginBottom: 10, padding: "14px 18px",
-              background: "linear-gradient(135deg, rgba(233,30,140,0.08), rgba(103,0,180,0.07))",
-              border: "1px solid rgba(255,100,160,0.22)",
+              background: "linear-gradient(135deg, rgba(218,165,32,0.07), rgba(139,100,0,0.05))",
+              border: "1px solid rgba(218,165,32,0.18)",
               borderRadius: 18, borderTopLeftRadius: 6,
             }}>
-              <div style={{ fontFamily: "'Courier Prime', monospace", fontSize: 9.5, color: "#ff69b4", letterSpacing: "0.15em", marginBottom: 5, textTransform: "uppercase" }}>♡ Huma</div>
-              <p style={{ fontSize: "0.97rem", color: "#f0d0e0", lineHeight: 1.6, fontStyle: "italic" }}>{lastBotText}</p>
+              <div style={{ fontFamily: "'Courier Prime', monospace", fontSize: 9.5, color: "#daa520", letterSpacing: "0.15em", marginBottom: 5, textTransform: "uppercase" }}>♡ Huma</div>
+              <p style={{ fontSize: "0.97rem", color: "#f5ecd0", lineHeight: 1.6, fontStyle: "italic" }}>{lastBotText}</p>
             </div>
           )}
 
@@ -712,20 +743,20 @@ export default function Home() {
           {lastUserText && status === "connected" && (
             <div className="bubble-in" style={{
               marginBottom: 20, padding: "14px 18px",
-              background: "rgba(60, 0, 45, 0.2)",
-              border: "1px solid rgba(156,21,101,0.22)",
+              background: "rgba(35, 26, 0, 0.3)",
+              border: "1px solid rgba(139,100,0,0.22)",
               borderRadius: 18, borderTopRightRadius: 6,
               textAlign: "right",
             }}>
-              <div style={{ fontFamily: "'Courier Prime', monospace", fontSize: 9.5, color: "#6b3a5a", letterSpacing: "0.15em", marginBottom: 5, textTransform: "uppercase" }}>you ♡</div>
-              <p style={{ fontSize: "0.97rem", color: "#d0afc0", lineHeight: 1.6 }}>{lastUserText}</p>
+              <div style={{ fontFamily: "'Courier Prime', monospace", fontSize: 9.5, color: "#5c4800", letterSpacing: "0.15em", marginBottom: 5, textTransform: "uppercase" }}>you ♡</div>
+              <p style={{ fontSize: "0.97rem", color: "#c8ad70", lineHeight: 1.6 }}>{lastUserText}</p>
             </div>
           )}
 
           {/* Error */}
           {err && (
-            <div style={{ marginBottom: 16, padding: "12px 16px", background: "rgba(180,0,50,0.12)", border: "1px solid rgba(180,0,50,0.35)", borderRadius: 12 }}>
-              <p style={{ fontSize: "0.88rem", color: "#f8a8b8" }}><strong>Error:</strong> {err}</p>
+            <div style={{ marginBottom: 16, padding: "12px 16px", background: "rgba(80,25,0,0.15)", border: "1px solid rgba(160,70,0,0.35)", borderRadius: 12 }}>
+              <p style={{ fontSize: "0.88rem", color: "#e8b870" }}><strong>Error:</strong> {err}</p>
             </div>
           )}
 
@@ -746,36 +777,36 @@ export default function Home() {
               <span key={lang} style={{
                 fontFamily: "'Courier Prime', monospace", fontSize: 10,
                 padding: "4px 12px", borderRadius: 20,
-                border: "1px solid rgba(255,100,160,0.15)",
-                color: "#4a2050", letterSpacing: "0.05em",
-                background: "rgba(60,0,45,0.15)",
+                border: "1px solid rgba(218,165,32,0.16)",
+                color: "#5c4800", letterSpacing: "0.05em",
+                background: "rgba(35,26,0,0.22)",
               }}>{lang}</span>
             ))}
           </div>
 
           {/* Log toggle */}
           <div style={{ textAlign: "center" }}>
-            <button onClick={() => setShowLogs(!showLogs)} style={{ background: "none", border: "none", fontFamily: "'Courier Prime', monospace", fontSize: 10, color: "rgba(100,50,80,0.45)", cursor: "pointer", letterSpacing: "0.1em" }}>
+            <button onClick={() => setShowLogs(!showLogs)} style={{ background: "none", border: "none", fontFamily: "'Courier Prime', monospace", fontSize: 10, color: "rgba(92,72,0,0.38)", cursor: "pointer", letterSpacing: "0.1em" }}>
               {showLogs ? "▲ hide logs" : "▼ debug logs"}
             </button>
           </div>
 
           {showLogs && logs.length > 0 && (
-            <div style={{ marginTop: 10, background: "#030110", borderRadius: 10, padding: "10px 12px", maxHeight: 150, overflowY: "auto", border: "1px solid rgba(60,0,45,0.3)" }}>
+            <div style={{ marginTop: 10, background: "#060500", borderRadius: 10, padding: "10px 12px", maxHeight: 150, overflowY: "auto", border: "1px solid rgba(40,30,0,0.4)" }}>
               {logs.map((log, i) => (
-                <div key={i} style={{ fontFamily: "'Courier Prime', monospace", fontSize: 10.5, color: i === logs.length - 1 ? "#7a3a5a" : "#2d1028", padding: "2px 0", borderBottom: "1px solid #0d0218" }}>
+                <div key={i} style={{ fontFamily: "'Courier Prime', monospace", fontSize: 10.5, color: i === logs.length - 1 ? "#7a6000" : "#2e2400", padding: "2px 0", borderBottom: "1px solid #0d0b00" }}>
                   {log}
                 </div>
               ))}
             </div>
           )}
 
-          {/* Bottom shimmer */}
-          <div style={{ position: "absolute", bottom: 0, left: "5%", right: "5%", height: 1, background: "linear-gradient(90deg, transparent, rgba(156,21,101,0.35), transparent)" }} />
+          {/* Bottom shimmer line */}
+          <div style={{ position: "absolute", bottom: 0, left: "5%", right: "5%", height: 1, background: "linear-gradient(90deg, transparent, rgba(184,134,11,0.38), transparent)" }} />
         </div>
 
         {/* Footer */}
-        <p style={{ marginTop: 22, fontFamily: "'Courier Prime', monospace", fontSize: 10, color: "rgba(70,30,55,0.5)", letterSpacing: "0.18em", textAlign: "center" }}>
+        <p style={{ marginTop: 22, fontFamily: "'Courier Prime', monospace", fontSize: 10, color: "rgba(92,72,0,0.42)", letterSpacing: "0.18em", textAlign: "center" }}>
           CONVAI · LIVEKIT · NEXT.JS
         </p>
       </div>
