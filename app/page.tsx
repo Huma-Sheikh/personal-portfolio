@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import { useRef, useState, useEffect } from "react";
+import type { Room as LiveKitRoom, RemoteTrack, RemoteTrackPublication, RemoteParticipant } from "livekit-client";
 
 type ConvaiConnectResponse = {
   session_id: string;
@@ -25,31 +26,30 @@ function Petal({ style }: { style: React.CSSProperties }) {
 
 // ─── Girl SVG Avatar ──────────────────────────────────────────────────────────
 function GirlAvatar({
-  isListening,
   isSpeaking,
   status,
 }: {
-  isListening: boolean;
   isSpeaking: boolean;
   status: string;
 }) {
   const [mouthOpen, setMouthOpen] = useState(0);
   const [blinkY, setBlinkY] = useState(1);
   const [eyeDir, setEyeDir] = useState({ x: 0, y: 0 });
-  const animRef = useRef<any>(null);
-  const blinkRef = useRef<any>(null);
-  const eyeRef = useRef<any>(null);
+  const animRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const blinkRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const eyeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Defer all setState calls into timeout callbacks to avoid setState-in-effect lint error
   useEffect(() => {
     if (isSpeaking) {
       const animate = () => {
         setMouthOpen(Math.random() * 0.75 + 0.15);
         animRef.current = setTimeout(animate, 70 + Math.random() * 110);
       };
-      animate();
+      animRef.current = setTimeout(animate, 0);
     } else {
       if (animRef.current) clearTimeout(animRef.current);
-      setMouthOpen(0);
+      animRef.current = setTimeout(() => setMouthOpen(0), 0);
     }
     return () => { if (animRef.current) clearTimeout(animRef.current); };
   }, [isSpeaking]);
@@ -70,7 +70,7 @@ function GirlAvatar({
       setEyeDir({ x: (Math.random() - 0.5) * 2.5, y: (Math.random() - 0.5) * 1.5 });
       eyeRef.current = setTimeout(moveEyes, 2000 + Math.random() * 3000);
     };
-    moveEyes();
+    eyeRef.current = setTimeout(moveEyes, 0);
     return () => { if (eyeRef.current) clearTimeout(eyeRef.current); };
   }, []);
 
@@ -124,44 +124,29 @@ function GirlAvatar({
         </filter>
       </defs>
 
-      {/* Neck */}
       <rect x="52" y="88" width="18" height="20" rx="5" fill="#ffd0b0" />
       <rect x="55" y="90" width="4" height="14" rx="2" fill="rgba(0,0,0,0.07)" />
-
-      {/* Body / Dress */}
       <ellipse cx="61" cy="130" rx="38" ry="20" fill="url(#dress)" />
       <rect x="23" y="110" width="76" height="28" rx="10" fill="url(#dress)" />
       <rect x="23" y="110" width="76" height="28" rx="10" fill="url(#dressShimmer)" />
       <path d="M 48 108 Q 61 118 74 108" stroke="rgba(255,255,255,0.25)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-
-      {/* Long Hair Back */}
       <path d="M 22 42 Q 12 70 16 105 Q 18 120 28 128 L 34 110 Q 26 95 28 72 Q 28 55 34 40 Z" fill="url(#hair)" />
       <path d="M 100 42 Q 110 70 106 105 Q 104 120 94 128 L 90 110 Q 98 95 94 72 Q 94 55 88 40 Z" fill="url(#hair)" />
-
-      {/* Head */}
       <ellipse cx="61" cy="52" rx="35" ry="40" fill="url(#skin)" />
-
-      {/* Hair Top */}
       <ellipse cx="61" cy="18" rx="36" ry="16" fill="url(#hair)" />
       <rect x="25" y="16" width="72" height="26" rx="6" fill="url(#hair)" />
       <path d="M 26 28 Q 20 50 24 72 Q 26 80 30 82 Q 28 60 30 42 Z" fill="url(#hair)" />
       <path d="M 96 28 Q 102 50 98 72 Q 96 80 92 82 Q 94 60 92 42 Z" fill="url(#hair)" />
       <ellipse cx="50" cy="16" rx="20" ry="10" fill="url(#hairShine)" opacity="0.7" />
       <path d="M 30 32 Q 40 24 55 28 Q 65 30 72 26 Q 82 22 92 28" stroke="url(#hairShine)" strokeWidth="3" fill="none" strokeLinecap="round" opacity="0.5" />
-
-      {/* Earrings */}
       <circle cx="26" cy="58" r="3" fill="url(#gem)" filter="url(#softGlow)" />
       <line x1="26" y1="61" x2="26" y2="67" stroke="#b8860b" strokeWidth="1.5" />
       <circle cx="26" cy="69" r="4" fill="url(#gem)" filter="url(#softGlow)" />
       <circle cx="96" cy="58" r="3" fill="url(#gem)" filter="url(#softGlow)" />
       <line x1="96" y1="61" x2="96" y2="67" stroke="#b8860b" strokeWidth="1.5" />
       <circle cx="96" cy="69" r="4" fill="url(#gem)" filter="url(#softGlow)" />
-
-      {/* Eyebrows */}
       <path d={connected ? "M 36 37 Q 44 31 52 35" : "M 36 38 Q 44 33 52 36"} stroke="#3d2600" strokeWidth="2" strokeLinecap="round" fill="none" />
       <path d={connected ? "M 70 35 Q 78 31 86 37" : "M 70 36 Q 78 33 86 38"} stroke="#3d2600" strokeWidth="2" strokeLinecap="round" fill="none" />
-
-      {/* Eyes */}
       <ellipse cx={44 + eyeDir.x * 0.3} cy={48 + eyeDir.y * 0.3} rx="9.5" ry={9 * blinkY} fill="white" />
       <ellipse cx={78 + eyeDir.x * 0.3} cy={48 + eyeDir.y * 0.3} rx="9.5" ry={9 * blinkY} fill="white" />
       <ellipse cx={44 + eyeDir.x} cy={48 + eyeDir.y} rx="6" ry={6 * blinkY} fill={isSpeaking ? "url(#irisSpeak)" : "url(#iris)"} filter={isSpeaking ? "url(#softGlow)" : undefined} />
@@ -170,15 +155,11 @@ function GirlAvatar({
       <circle cx={78 + eyeDir.x} cy={48 + eyeDir.y} r={2.8 * blinkY} fill="#1a1000" />
       <circle cx={46 + eyeDir.x} cy={46 + eyeDir.y} r={1.4 * blinkY} fill="white" opacity="0.9" />
       <circle cx={80 + eyeDir.x} cy={46 + eyeDir.y} r={1.4 * blinkY} fill="white" opacity="0.9" />
-      {/* Lashes */}
       <path d={`M 35 ${48 - 9 * blinkY} Q 44 ${44 - 9 * blinkY} 53 ${48 - 9 * blinkY}`} stroke="#1a1000" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity={blinkY} />
       <path d={`M 69 ${48 - 9 * blinkY} Q 78 ${44 - 9 * blinkY} 87 ${48 - 9 * blinkY}`} stroke="#1a1000" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity={blinkY} />
-
-      {/* Nose */}
       <path d="M 61 55 Q 58 62 59 64 Q 61 66 63 64 Q 64 62 61 55" fill="#d4906a" opacity="0.35" />
       <path d="M 57 63 Q 61 65.5 65 63" stroke="#d4906a" strokeWidth="1" fill="none" strokeLinecap="round" opacity="0.5" />
 
-      {/* Mouth */}
       {mouthOpen > 0.06 ? (
         <>
           <ellipse cx="61" cy={mouthCY} rx="9.5" ry={Math.max(1.5, mouthH / 2)} fill="#3d1a00" />
@@ -193,14 +174,10 @@ function GirlAvatar({
         </>
       )}
 
-      {/* Blush */}
       <ellipse cx="34" cy="62" rx="8" ry="5" fill="#f4a460" opacity="0.28" />
       <ellipse cx="88" cy="62" rx="8" ry="5" fill="#f4a460" opacity="0.28" />
-
-      {/* Forehead highlight */}
       <ellipse cx="55" cy="36" rx="12" ry="7" fill="rgba(255,255,255,0.08)" />
 
-      {/* Speaking sparkles */}
       {isSpeaking && (
         <>
           <circle cx="20" cy="50" r="2" fill="#ffd700" opacity="0.7" filter="url(#softGlow)" />
@@ -252,11 +229,11 @@ export default function Home() {
   const [float, setFloat] = useState(0);
   const [petals, setPetals] = useState<Array<{ id: number; left: number; delay: number; duration: number; size: number; opacity: number }>>([]);
 
-  const roomRef = useRef<any>(null);
-  const localTrackRef = useRef<any>(null);
+  const roomRef = useRef<LiveKitRoom | null>(null);
+  const localTrackRef = useRef<{ stop: () => void } | null>(null);
   const remoteAudioElements = useRef<HTMLAudioElement[]>([]);
   const floatT = useRef(0);
-  const floatTimer = useRef<any>(null);
+  const floatTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const tick = () => {
@@ -265,7 +242,7 @@ export default function Home() {
       floatTimer.current = setTimeout(tick, 30);
     };
     tick();
-    return () => clearTimeout(floatTimer.current);
+    return () => { if (floatTimer.current) clearTimeout(floatTimer.current); };
   }, []);
 
   useEffect(() => {
@@ -299,10 +276,13 @@ export default function Home() {
         body: JSON.stringify({ character_session_id: characterSessionId }),
       });
 
-      const data = await connectResp.json();
-      if (!connectResp.ok) throw new Error(data.error?.message || JSON.stringify(data.error) || "Failed to connect");
+      const data = await connectResp.json() as ConvaiConnectResponse;
+      if (!connectResp.ok) {
+        const errData = data as unknown as { error?: { message?: string } };
+        throw new Error(errData.error?.message || "Failed to connect");
+      }
 
-      const { room_url, room_name, token, character_session_id } = data as ConvaiConnectResponse;
+      const { room_url, room_name, token, character_session_id } = data;
       addLog(`✅ Room: ${room_name}`);
       setCharacterSessionId(character_session_id);
 
@@ -311,7 +291,7 @@ export default function Home() {
       const room = new Room({ adaptiveStream: true, dynacast: true });
       roomRef.current = room;
 
-      room.on(RoomEvent.TrackSubscribed, async (track: any, _pub: any, participant: any) => {
+      room.on(RoomEvent.TrackSubscribed, async (track: RemoteTrack, _pub: RemoteTrackPublication, participant: RemoteParticipant) => {
         addLog(`🎧 Audio from ${participant.identity}`);
         if (track.kind === Track.Kind.Audio) {
           try {
@@ -322,28 +302,29 @@ export default function Home() {
             el.style.display = "none";
             document.body.appendChild(el);
 
-            // Resume AudioContext — key fix for browser autoplay policy
-            await livekit.startAudio();
-
-            try { await el.play(); } catch { /* handled by startAudio */ }
+            try { await room.startAudio(); } catch { /* ignore */ }
+            try { await el.play(); } catch { /* ignore */ }
 
             setIsSpeaking(true);
             el.onplay = () => setIsSpeaking(true);
             el.onended = () => setIsSpeaking(false);
             el.onpause = () => setIsSpeaking(false);
             remoteAudioElements.current.push(el);
-          } catch (e: any) { addLog(`❌ Audio error: ${e.message}`); }
+          } catch (e: unknown) {
+            const msg = e instanceof Error ? e.message : "Unknown audio error";
+            addLog(`❌ Audio error: ${msg}`);
+          }
         }
       });
 
-      room.on(RoomEvent.TrackUnsubscribed, (track: any) => {
+      room.on(RoomEvent.TrackUnsubscribed, (track: RemoteTrack) => {
         if (track.kind === Track.Kind.Audio) setIsSpeaking(false);
       });
 
       room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
         const text = new TextDecoder().decode(payload);
         try {
-          const d = JSON.parse(text);
+          const d = JSON.parse(text) as { type?: string; data?: { text?: string } };
           if (d.type === "bot-transcription" && d.data?.text) {
             setLastBotText(d.data.text);
             addLog(`💬 Huma: ${d.data.text}`);
@@ -373,9 +354,10 @@ export default function Home() {
       addLog("✦ Say hello to Huma! ✨");
       setStatus("connected");
       setIsListening(true);
-    } catch (e: any) {
-      addLog(`❌ ${e.message}`);
-      setErr(e?.message || String(e));
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      addLog(`❌ ${msg}`);
+      setErr(msg);
       setStatus("error");
       setIsListening(false); setIsSpeaking(false);
       localTrackRef.current?.stop(); localTrackRef.current = null;
@@ -512,12 +494,10 @@ export default function Home() {
         position: "fixed", inset: 0, zIndex: 0, overflow: "hidden",
         background: "radial-gradient(ellipse at 25% 20%, #2a1f00 0%, #1a1200 55%, #0d0a00 100%)"
       }}>
-        {/* Warm glow blobs */}
         <div style={{ position: "absolute", top: "-15%", left: "-5%", width: 700, height: 700, background: "radial-gradient(circle, rgba(184,134,11,0.14) 0%, transparent 65%)", borderRadius: "50%" }} />
         <div style={{ position: "absolute", bottom: "-20%", right: "-10%", width: 600, height: 600, background: "radial-gradient(circle, rgba(139,100,0,0.11) 0%, transparent 65%)", borderRadius: "50%" }} />
         <div style={{ position: "absolute", top: "35%", left: "55%", width: 400, height: 400, background: "radial-gradient(circle, rgba(218,165,32,0.05) 0%, transparent 65%)", borderRadius: "50%" }} />
 
-        {/* Stars — some gold-tinted */}
         {[...Array(35)].map((_, i) => (
           <div key={i} style={{
             position: "absolute",
@@ -536,7 +516,6 @@ export default function Home() {
           }} />
         ))}
 
-        {/* Mustard gold petals */}
         {petals.map((p) => (
           <Petal key={p.id} style={{
             left: `${p.left}%`,
@@ -590,10 +569,7 @@ export default function Home() {
           overflow: "hidden",
         }}>
 
-          {/* Top shimmer line */}
           <div style={{ position: "absolute", top: 0, left: "5%", right: "5%", height: 1, background: "linear-gradient(90deg, transparent, rgba(218,165,32,0.75), rgba(255,215,0,0.4), transparent)" }} />
-
-          {/* Corner accents */}
           <div style={{ position: "absolute", top: 16, left: 16, width: 20, height: 20, borderTop: "1.5px solid rgba(218,165,32,0.38)", borderLeft: "1.5px solid rgba(218,165,32,0.38)", borderRadius: "4px 0 0 0" }} />
           <div style={{ position: "absolute", top: 16, right: 16, width: 20, height: 20, borderTop: "1.5px solid rgba(218,165,32,0.38)", borderRight: "1.5px solid rgba(218,165,32,0.38)", borderRadius: "0 4px 0 0" }} />
           <div style={{ position: "absolute", bottom: 16, left: 16, width: 20, height: 20, borderBottom: "1.5px solid rgba(218,165,32,0.18)", borderLeft: "1.5px solid rgba(218,165,32,0.18)", borderRadius: "0 0 0 4px" }} />
@@ -603,7 +579,6 @@ export default function Home() {
           <div style={{ display: "flex", justifyContent: "center", marginBottom: 24, position: "relative" }}>
             <div style={{ position: "relative", width: 220, height: 220 }}>
 
-              {/* Burst ring */}
               {isSpeaking && (
                 <div style={{
                   position: "absolute", inset: -22, borderRadius: "50%",
@@ -612,7 +587,6 @@ export default function Home() {
                 }} />
               )}
 
-              {/* Orbit 1 — CW */}
               <div style={{
                 position: "absolute", inset: -10, borderRadius: "50%",
                 border: "1px dashed rgba(218,165,32,0.32)",
@@ -630,7 +604,6 @@ export default function Home() {
                 }} />
               </div>
 
-              {/* Orbit 2 — CCW */}
               <div style={{
                 position: "absolute", inset: -26, borderRadius: "50%",
                 border: "1px solid rgba(139,100,0,0.18)",
@@ -646,7 +619,6 @@ export default function Home() {
                 }} />
               </div>
 
-              {/* Orbit 3 — CW slow */}
               <div style={{
                 position: "absolute", inset: -10, borderRadius: "50%",
                 animationName: "orbitCW",
@@ -661,7 +633,6 @@ export default function Home() {
                 }} />
               </div>
 
-              {/* Main avatar circle */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "50%",
                 background: "radial-gradient(circle at 38% 32%, #1c1500, #080600)",
@@ -679,7 +650,7 @@ export default function Home() {
                 transition: "border-color 0.5s, box-shadow 0.5s",
               }}>
                 <div style={{ transform: `translateY(${float}px)`, height: "100%", transition: "none" }}>
-                  <GirlAvatar isListening={isListening} isSpeaking={isSpeaking} status={status} />
+                  <GirlAvatar isSpeaking={isSpeaking} status={status} />
                 </div>
               </div>
             </div>
@@ -801,11 +772,9 @@ export default function Home() {
             </div>
           )}
 
-          {/* Bottom shimmer line */}
           <div style={{ position: "absolute", bottom: 0, left: "5%", right: "5%", height: 1, background: "linear-gradient(90deg, transparent, rgba(184,134,11,0.38), transparent)" }} />
         </div>
 
-        {/* Footer */}
         <p style={{ marginTop: 22, fontFamily: "'Courier Prime', monospace", fontSize: 10, color: "rgba(92,72,0,0.42)", letterSpacing: "0.18em", textAlign: "center" }}>
           CONVAI · LIVEKIT · NEXT.JS
         </p>

@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
 
+interface ConvaiErrorResponse {
+  message?: string;
+  [key: string]: unknown;
+}
+
 export async function POST(req: Request) {
   try {
-    const { character_session_id } = await req.json().catch(() => ({}));
-    
+    const body = await req.json().catch(() => ({})) as { character_session_id?: string };
+    const { character_session_id } = body;
+
     const apiKey = process.env.CONVAI_API_KEY;
     const characterId = process.env.CONVAI_CHARACTER_ID;
 
@@ -14,11 +20,10 @@ export async function POST(req: Request) {
       );
     }
 
-    // SIMPLIFIED: Language is configured in Convai Dashboard, not here
-    const requestBody: any = {
+    const requestBody = {
       character_id: characterId,
       connection_type: "audio",
-      character_session_id: character_session_id || undefined
+      ...(character_session_id ? { character_session_id } : {}),
     };
 
     console.log("🔗 Connecting to Convai (language set in dashboard)");
@@ -32,7 +37,7 @@ export async function POST(req: Request) {
       body: JSON.stringify(requestBody),
     });
 
-    const data = await resp.json();
+    const data = await resp.json() as ConvaiErrorResponse;
 
     if (!resp.ok) {
       console.error("❌ Convai API error:", data);
@@ -41,11 +46,9 @@ export async function POST(req: Request) {
 
     console.log("✅ Connected - using character's dashboard language settings");
     return NextResponse.json(data);
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Internal server error";
     console.error("💥 Server error:", error);
-    return NextResponse.json(
-      { error: error.message || "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
