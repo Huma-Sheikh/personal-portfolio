@@ -10,7 +10,7 @@
     "moduleResolution": "node", // ← change this from "bundler"
     "strict": true,
     "skipLibCheck": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
       {
