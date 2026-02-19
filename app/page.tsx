@@ -1,6 +1,6 @@
 "use client";
-
-import { useRef, useState } from "react";
+import React from 'react';
+import { useRef, useState, useEffect } from "react";
 
 type ConvaiConnectResponse = {
   session_id: string;
@@ -10,35 +10,284 @@ type ConvaiConnectResponse = {
   token: string;
 };
 
+// ─── Floating Petal ───────────────────────────────────────────────────────────
+function Petal({ style }: { style: React.CSSProperties }) {
+  return (
+    <div style={{
+      position: "absolute",
+      background: "linear-gradient(135deg, rgba(255,182,193,0.6), rgba(255,105,180,0.3))",
+      borderRadius: "60% 40% 60% 40% / 50% 60% 40% 50%",
+      pointerEvents: "none",
+      ...style,
+    }} />
+  );
+}
+
+// ─── Girl SVG Avatar ──────────────────────────────────────────────────────────
+function GirlAvatar({
+  isListening,
+  isSpeaking,
+  status,
+}: {
+  isListening: boolean;
+  isSpeaking: boolean;
+  status: string;
+}) {
+  const [mouthOpen, setMouthOpen] = useState(0);
+  const [blinkY, setBlinkY] = useState(1);
+  const [eyeDir, setEyeDir] = useState({ x: 0, y: 0 });
+  const animRef = useRef<any>(null);
+  const blinkRef = useRef<any>(null);
+  const eyeRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (isSpeaking) {
+      const animate = () => {
+        setMouthOpen(Math.random() * 0.75 + 0.15);
+        animRef.current = setTimeout(animate, 70 + Math.random() * 110);
+      };
+      animate();
+    } else {
+      if (animRef.current) clearTimeout(animRef.current);
+      setMouthOpen(0);
+    }
+    return () => { if (animRef.current) clearTimeout(animRef.current); };
+  }, [isSpeaking]);
+
+  useEffect(() => {
+    const scheduleBlink = () => {
+      blinkRef.current = setTimeout(() => {
+        setBlinkY(0.07);
+        setTimeout(() => { setBlinkY(1); scheduleBlink(); }, 130);
+      }, 2200 + Math.random() * 2500);
+    };
+    scheduleBlink();
+    return () => { if (blinkRef.current) clearTimeout(blinkRef.current); };
+  }, []);
+
+  useEffect(() => {
+    const moveEyes = () => {
+      setEyeDir({ x: (Math.random() - 0.5) * 2.5, y: (Math.random() - 0.5) * 1.5 });
+      eyeRef.current = setTimeout(moveEyes, 2000 + Math.random() * 3000);
+    };
+    moveEyes();
+    return () => { if (eyeRef.current) clearTimeout(eyeRef.current); };
+  }, []);
+
+  const mouthH = mouthOpen * 16;
+  const mouthCY = 69 + mouthOpen * 3;
+  const connected = status === "connected";
+
+  return (
+    <svg viewBox="0 0 130 145" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="skin" cx="48%" cy="38%" r="62%">
+          <stop offset="0%" stopColor="#ffe8d6" />
+          <stop offset="70%" stopColor="#ffd0b0" />
+          <stop offset="100%" stopColor="#f0b090" />
+        </radialGradient>
+        <linearGradient id="hair" x1="0%" y1="0%" x2="80%" y2="100%">
+          <stop offset="0%" stopColor="#2c1654" />
+          <stop offset="50%" stopColor="#1a0a2e" />
+          <stop offset="100%" stopColor="#0d0618" />
+        </linearGradient>
+        <linearGradient id="hairShine" x1="20%" y1="0%" x2="60%" y2="50%">
+          <stop offset="0%" stopColor="rgba(255,182,213,0.35)" />
+          <stop offset="100%" stopColor="rgba(255,182,213,0)" />
+        </linearGradient>
+        <radialGradient id="iris" cx="40%" cy="35%" r="55%">
+          <stop offset="0%" stopColor="#ff9eb5" />
+          <stop offset="40%" stopColor="#c2185b" />
+          <stop offset="100%" stopColor="#6a0036" />
+        </radialGradient>
+        <radialGradient id="irisSpeak" cx="40%" cy="35%" r="55%">
+          <stop offset="0%" stopColor="#ffcce0" />
+          <stop offset="40%" stopColor="#ff69b4" />
+          <stop offset="100%" stopColor="#9c1560" />
+        </radialGradient>
+        <linearGradient id="dress" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#7b1fa2" />
+          <stop offset="100%" stopColor="#ad1457" />
+        </linearGradient>
+        <linearGradient id="dressShimmer" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="rgba(255,255,255,0)" />
+          <stop offset="50%" stopColor="rgba(255,255,255,0.12)" />
+          <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+        </linearGradient>
+        <radialGradient id="gem" cx="50%" cy="30%" r="60%">
+          <stop offset="0%" stopColor="#ff9eb5" />
+          <stop offset="100%" stopColor="#ad1457" />
+        </radialGradient>
+        <filter id="softGlow">
+          <feGaussianBlur stdDeviation="1.5" result="blur" />
+          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+      </defs>
+
+      {/* Neck */}
+      <rect x="52" y="88" width="18" height="20" rx="5" fill="#ffd0b0" />
+      <rect x="55" y="90" width="4" height="14" rx="2" fill="rgba(0,0,0,0.07)" />
+
+      {/* Body / Dress */}
+      <ellipse cx="61" cy="130" rx="38" ry="20" fill="url(#dress)" />
+      <rect x="23" y="110" width="76" height="28" rx="10" fill="url(#dress)" />
+      <rect x="23" y="110" width="76" height="28" rx="10" fill="url(#dressShimmer)" />
+      <path d="M 48 108 Q 61 118 74 108" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+
+      {/* Long Hair Back */}
+      <path d="M 22 42 Q 12 70 16 105 Q 18 120 28 128 L 34 110 Q 26 95 28 72 Q 28 55 34 40 Z" fill="url(#hair)" />
+      <path d="M 100 42 Q 110 70 106 105 Q 104 120 94 128 L 90 110 Q 98 95 94 72 Q 94 55 88 40 Z" fill="url(#hair)" />
+
+      {/* Head */}
+      <ellipse cx="61" cy="52" rx="35" ry="40" fill="url(#skin)" />
+
+      {/* Hair Top */}
+      <ellipse cx="61" cy="18" rx="36" ry="16" fill="url(#hair)" />
+      <rect x="25" y="16" width="72" height="26" rx="6" fill="url(#hair)" />
+      <path d="M 26 28 Q 20 50 24 72 Q 26 80 30 82 Q 28 60 30 42 Z" fill="url(#hair)" />
+      <path d="M 96 28 Q 102 50 98 72 Q 96 80 92 82 Q 94 60 92 42 Z" fill="url(#hair)" />
+      <ellipse cx="50" cy="16" rx="20" ry="10" fill="url(#hairShine)" opacity="0.7" />
+      <path d="M 30 32 Q 40 24 55 28 Q 65 30 72 26 Q 82 22 92 28" stroke="url(#hairShine)" strokeWidth="3" fill="none" strokeLinecap="round" opacity="0.5" />
+
+      {/* Earrings */}
+      <circle cx="26" cy="58" r="3" fill="url(#gem)" filter="url(#softGlow)" />
+      <line x1="26" y1="61" x2="26" y2="67" stroke="#ad1457" strokeWidth="1.5" />
+      <circle cx="26" cy="69" r="4" fill="url(#gem)" filter="url(#softGlow)" />
+      <circle cx="96" cy="58" r="3" fill="url(#gem)" filter="url(#softGlow)" />
+      <line x1="96" y1="61" x2="96" y2="67" stroke="#ad1457" strokeWidth="1.5" />
+      <circle cx="96" cy="69" r="4" fill="url(#gem)" filter="url(#softGlow)" />
+
+      {/* Eyebrows */}
+      <path d={connected ? "M 36 37 Q 44 31 52 35" : "M 36 38 Q 44 33 52 36"} stroke="#3d1a2a" strokeWidth="2" strokeLinecap="round" fill="none" />
+      <path d={connected ? "M 70 35 Q 78 31 86 37" : "M 70 36 Q 78 33 86 38"} stroke="#3d1a2a" strokeWidth="2" strokeLinecap="round" fill="none" />
+
+      {/* Eyes */}
+      <ellipse cx={44 + eyeDir.x * 0.3} cy={48 + eyeDir.y * 0.3} rx="9.5" ry={9 * blinkY} fill="white" />
+      <ellipse cx={78 + eyeDir.x * 0.3} cy={48 + eyeDir.y * 0.3} rx="9.5" ry={9 * blinkY} fill="white" />
+      <ellipse cx={44 + eyeDir.x} cy={48 + eyeDir.y} rx="6" ry={6 * blinkY} fill={isSpeaking ? "url(#irisSpeak)" : "url(#iris)"} filter={isSpeaking ? "url(#softGlow)" : undefined} />
+      <ellipse cx={78 + eyeDir.x} cy={48 + eyeDir.y} rx="6" ry={6 * blinkY} fill={isSpeaking ? "url(#irisSpeak)" : "url(#iris)"} filter={isSpeaking ? "url(#softGlow)" : undefined} />
+      <circle cx={44 + eyeDir.x} cy={48 + eyeDir.y} r={2.8 * blinkY} fill="#1a0010" />
+      <circle cx={78 + eyeDir.x} cy={48 + eyeDir.y} r={2.8 * blinkY} fill="#1a0010" />
+      <circle cx={46 + eyeDir.x} cy={46 + eyeDir.y} r={1.4 * blinkY} fill="white" opacity="0.9" />
+      <circle cx={80 + eyeDir.x} cy={46 + eyeDir.y} r={1.4 * blinkY} fill="white" opacity="0.9" />
+      {/* Lashes */}
+      <path d={`M 35 ${48 - 9 * blinkY} Q 44 ${44 - 9 * blinkY} 53 ${48 - 9 * blinkY}`} stroke="#1a0010" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity={blinkY} />
+      <path d={`M 69 ${48 - 9 * blinkY} Q 78 ${44 - 9 * blinkY} 87 ${48 - 9 * blinkY}`} stroke="#1a0010" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity={blinkY} />
+
+      {/* Nose */}
+      <path d="M 61 55 Q 58 62 59 64 Q 61 66 63 64 Q 64 62 61 55" fill="#d4906a" opacity="0.35" />
+      <path d="M 57 63 Q 61 65.5 65 63" stroke="#d4906a" strokeWidth="1" fill="none" strokeLinecap="round" opacity="0.5" />
+
+      {/* Mouth */}
+      {mouthOpen > 0.06 ? (
+        <>
+          <ellipse cx="61" cy={mouthCY} rx="9.5" ry={Math.max(1.5, mouthH / 2)} fill="#2d0a1a" />
+          <path d={`M 51.5 ${mouthCY - mouthH / 2} Q 57 ${mouthCY - mouthH / 2 - 4} 61 ${mouthCY - mouthH / 2 - 3} Q 65 ${mouthCY - mouthH / 2 - 4} 70.5 ${mouthCY - mouthH / 2}`} stroke="#e57090" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+          <path d={`M 51.5 ${mouthCY + mouthH / 2} Q 61 ${mouthCY + mouthH / 2 + 4} 70.5 ${mouthCY + mouthH / 2}`} stroke="#e57090" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+          {mouthOpen > 0.3 && <rect x="55" y={mouthCY - mouthH / 2 + 1} width="12" height={Math.min(5, mouthH - 2)} rx="2" fill="white" opacity="0.85" />}
+        </>
+      ) : (
+        <>
+          <path d={`M 52 68 Q 57 65.5 61 67 Q 65 65.5 70 68 Q 64 ${connected ? 74 : 72} 61 ${connected ? 74.5 : 72.5} Q 58 ${connected ? 74 : 72} 52 68 Z`} fill="#e57090" opacity="0.85" />
+          <path d="M 52 68 Q 57 65.5 61 67 Q 65 65.5 70 68" stroke="#c2406a" strokeWidth="1" fill="none" />
+        </>
+      )}
+
+      {/* Blush */}
+      <ellipse cx="34" cy="62" rx="8" ry="5" fill="#ffb3c6" opacity="0.35" />
+      <ellipse cx="88" cy="62" rx="8" ry="5" fill="#ffb3c6" opacity="0.35" />
+
+      {/* Forehead highlight */}
+      <ellipse cx="55" cy="36" rx="12" ry="7" fill="rgba(255,255,255,0.08)" />
+
+      {/* Speaking sparkles */}
+      {isSpeaking && (
+        <>
+          <circle cx="20" cy="50" r="2" fill="#ff69b4" opacity="0.7" filter="url(#softGlow)" />
+          <circle cx="102" cy="45" r="1.5" fill="#ffb3c6" opacity="0.6" filter="url(#softGlow)" />
+          <circle cx="15" cy="70" r="1.5" fill="#c71585" opacity="0.5" />
+          <circle cx="107" cy="65" r="2" fill="#ff69b4" opacity="0.6" filter="url(#softGlow)" />
+        </>
+      )}
+    </svg>
+  );
+}
+
+// ─── Sound Wave ───────────────────────────────────────────────────────────────
+function SoundWave({ active, color1, color2 }: { active: boolean; color1: string; color2: string }) {
+  const bars = [0.3, 0.5, 0.8, 1.0, 0.7, 0.9, 0.6, 1.0, 0.75, 0.5, 0.85, 0.4, 0.65, 0.9, 0.3];
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 2.5, height: 32 }}>
+      {bars.map((h, i) => (
+        <div key={i} style={{
+          width: 3, borderRadius: 3,
+          background: `linear-gradient(to top, ${color1}, ${color2})`,
+          height: active ? `${h * 100}%` : "15%",
+          opacity: active ? 0.9 : 0.25,
+          animation: active ? `waveBar ${0.45 + (i % 5) * 0.12}s ease-in-out infinite alternate` : "none",
+          animationDelay: `${i * 0.04}s`,
+          transition: "height 0.3s ease, opacity 0.3s ease",
+        }} />
+      ))}
+    </div>
+  );
+}
+
+// ─── Main Page ────────────────────────────────────────────────────────────────
 export default function Home() {
   const [status, setStatus] = useState<"idle" | "connecting" | "connected" | "error">("idle");
   const [err, setErr] = useState<string | null>(null);
   const [characterSessionId, setCharacterSessionId] = useState<string | null>(null);
-  const [debugInfo, setDebugInfo] = useState<string>("");
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
-  const [detectedLanguage, setDetectedLanguage] = useState<string>("Waiting...");
-  
+  const [lastBotText, setLastBotText] = useState<string>("");
+  const [lastUserText, setLastUserText] = useState<string>("");
+  const [showLogs, setShowLogs] = useState(false);
+  const [float, setFloat] = useState(0);
+  const [petals, setPetals] = useState<Array<{ id: number; left: number; delay: number; duration: number; size: number; opacity: number }>>([]);
+
   const roomRef = useRef<any>(null);
   const localTrackRef = useRef<any>(null);
   const remoteAudioElements = useRef<HTMLAudioElement[]>([]);
+  const floatT = useRef(0);
+  const floatTimer = useRef<any>(null);
+
+  useEffect(() => {
+    const tick = () => {
+      floatT.current += 0.025;
+      setFloat(Math.sin(floatT.current) * 7);
+      floatTimer.current = setTimeout(tick, 30);
+    };
+    tick();
+    return () => clearTimeout(floatTimer.current);
+  }, []);
+
+  useEffect(() => {
+    setPetals(Array.from({ length: 18 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      delay: Math.random() * 12,
+      duration: 10 + Math.random() * 12,
+      size: 6 + Math.random() * 10,
+      opacity: 0.15 + Math.random() * 0.35,
+    })));
+  }, []);
 
   const addLog = (msg: string) => {
     console.log(msg);
-    setLogs(prev => [...prev.slice(-15), `[${new Date().toLocaleTimeString()}] ${msg}`]);
+    setLogs((p) => [...p.slice(-20), `[${new Date().toLocaleTimeString()}] ${msg}`]);
   };
 
   async function startCall() {
     setErr(null);
     setStatus("connecting");
-    setDebugInfo("");
     setLogs([]);
-    setDetectedLanguage("Waiting...");
+    setLastBotText("");
+    setLastUserText("");
 
     try {
-      addLog("🔄 Requesting multilingual connection...");
-      
+      addLog("🌸 Waking up Huma...");
       const connectResp = await fetch("/api/convai/connect", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -46,378 +295,490 @@ export default function Home() {
       });
 
       const data = await connectResp.json();
-
-      if (!connectResp.ok) {
-        throw new Error(data.error?.message || JSON.stringify(data.error) || "Failed to connect");
-      }
+      if (!connectResp.ok) throw new Error(data.error?.message || JSON.stringify(data.error) || "Failed to connect");
 
       const { room_url, room_name, token, character_session_id } = data as ConvaiConnectResponse;
-      
-      addLog(`✅ Got room: ${room_name}`);
+      addLog(`✅ Room: ${room_name}`);
       setCharacterSessionId(character_session_id);
 
       const livekit = await import("livekit-client");
       const { Room, RoomEvent, Track, createLocalAudioTrack } = livekit;
-
-      const room = new Room({
-        adaptiveStream: true,
-        dynacast: true,
-      });
+      const room = new Room({ adaptiveStream: true, dynacast: true });
       roomRef.current = room;
 
-      room.on(RoomEvent.ParticipantConnected, (participant: any) => {
-        addLog(`👤 Participant joined: ${participant.identity}`);
-      });
-
-      room.on(RoomEvent.TrackPublished, (publication: any, participant: any) => {
-        addLog(`📢 Track published by ${participant.identity}`);
-      });
-
-      room.on(RoomEvent.TrackSubscribed, async (
-        track: any,
-        publication: any,
-        participant: any
-      ) => {
-        addLog(`🎧 Track subscribed: ${track.kind} from ${participant.identity}`);
-
+      room.on(RoomEvent.TrackSubscribed, async (track: any, _pub: any, participant: any) => {
+        addLog(`🎧 Audio from ${participant.identity}`);
         if (track.kind === Track.Kind.Audio) {
-          addLog("🔊 AUDIO TRACK - Creating audio element");
-          
           try {
-            const audioElement = track.attach() as HTMLAudioElement;
-            audioElement.autoplay = true;
-            audioElement.volume = 1.0;
-            audioElement.muted = false;
-            audioElement.style.display = 'none';
-            document.body.appendChild(audioElement);
-            
-            addLog("✅ Audio element attached to DOM");
-
-            try {
-              await audioElement.play();
-              addLog("▶️ AUDIO PLAYING!");
-              setIsSpeaking(true);
-            } catch (playErr: any) {
-              addLog(`⚠️ Autoplay blocked: ${playErr.message}`);
-              addLog("👆 Click anywhere to enable audio");
-              
-              const enableAudio = async () => {
-                try {
-                  await audioElement.play();
-                  addLog("✅ Audio enabled!");
-                  setIsSpeaking(true);
-                  document.removeEventListener('click', enableAudio);
-                } catch (e: any) {
-                  addLog(`❌ Still blocked: ${e.message}`);
-                }
-              };
-              document.addEventListener('click', enableAudio);
+            const el = track.attach() as HTMLAudioElement;
+            el.autoplay = true; el.volume = 1.0; el.muted = false; el.style.display = "none";
+            document.body.appendChild(el);
+            try { await el.play(); setIsSpeaking(true); }
+            catch {
+              const enable = async () => { await el.play().catch(() => { }); setIsSpeaking(true); document.removeEventListener("click", enable); };
+              document.addEventListener("click", enable);
             }
-
-            audioElement.onplay = () => {
-              setIsSpeaking(true);
-            };
-
-            audioElement.onended = () => {
-              setIsSpeaking(false);
-            };
-
-            audioElement.onpause = () => {
-              setIsSpeaking(false);
-            };
-
-            audioElement.onerror = (e) => {
-              addLog(`❌ Audio error: ${e}`);
-              setIsSpeaking(false);
-            };
-
-            remoteAudioElements.current.push(audioElement);
-          } catch (attachErr: any) {
-            addLog(`❌ Failed to attach audio: ${attachErr.message}`);
-          }
+            el.onplay = () => setIsSpeaking(true);
+            el.onended = () => setIsSpeaking(false);
+            el.onpause = () => setIsSpeaking(false);
+            remoteAudioElements.current.push(el);
+          } catch (e: any) { addLog(`❌ Audio error: ${e.message}`); }
         }
       });
 
       room.on(RoomEvent.TrackUnsubscribed, (track: any) => {
-        if (track.kind === Track.Kind.Audio) {
-          setIsSpeaking(false);
-        }
+        if (track.kind === Track.Kind.Audio) setIsSpeaking(false);
       });
 
-      room.on(RoomEvent.DataReceived, (payload: Uint8Array, participant: any) => {
+      room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
         const text = new TextDecoder().decode(payload);
-        
         try {
-          const data = JSON.parse(text);
-          
-          // Bot transcription
-          if (data.type === "bot-transcription" && data.data?.text) {
-            const botText = data.data.text;
-            const botLang = data.data.language || "unknown";
-            addLog(`🤖 BOT [${botLang}]: ${botText}`);
+          const d = JSON.parse(text);
+          if (d.type === "bot-transcription" && d.data?.text) {
+            setLastBotText(d.data.text);
+            addLog(`💬 Huma: ${d.data.text}`);
           }
-          
-          // User transcription - THIS IS WHERE LANGUAGE IS DETECTED
-          if (data.type === "user-transcription" && data.data?.text) {
-            const userText = data.data.text;
-            const userLang = data.data.language || "unknown";
-            
-            // Update detected language
-            const langMap: any = {
-              "ar": "العربية (Arabic)",
-              "ar-SA": "العربية السعودية",
-              "en": "English",
-              "en-US": "English (US)",
-              "ur": "اردو (Urdu)",
-              "ur-PK": "اردو (پاکستان)"
-            };
-            
-            const displayLang = langMap[userLang] || userLang;
-            setDetectedLanguage(displayLang);
-            
-            addLog(`👤 YOU [${displayLang}]: ${userText}`);
+          if (d.type === "user-transcription" && d.data?.text) {
+            setLastUserText(d.data.text);
+            addLog(`🎤 You: ${d.data.text}`);
           }
-          
-        } catch (e) {
-          // Not JSON, ignore
-        }
+        } catch { }
       });
 
-      room.on(RoomEvent.Disconnected, (reason?: any) => {
-        addLog(`🔌 Disconnected: ${reason || 'unknown'}`);
-        setStatus("idle");
-        setIsListening(false);
-        setIsSpeaking(false);
+      room.on(RoomEvent.Disconnected, () => {
+        addLog("🔌 Disconnected");
+        setStatus("idle"); setIsListening(false); setIsSpeaking(false);
       });
 
-      addLog("🔗 Connecting to LiveKit room...");
       await room.connect(room_url, token);
-      addLog("✅ Connected to room!");
-      
-      // NOTE: Language is configured in Convai Dashboard, not via LiveKit
-      addLog("ℹ️ Using language settings from Convai character dashboard");
+      addLog("✅ Connected!");
 
-      addLog("🎤 Creating microphone track...");
-      
-      // Optimal audio settings for multilingual recognition
       const localAudioTrack = await createLocalAudioTrack({
-        echoCancellation: true,
-        noiseSuppression: true,
-        autoGainControl: true,
-        sampleRate: 48000,
-        channelCount: 1,
+        echoCancellation: true, noiseSuppression: true,
+        autoGainControl: true, sampleRate: 48000, channelCount: 1,
       });
-      
       localTrackRef.current = localAudioTrack;
-      
-      addLog("📤 Publishing microphone...");
-      await room.localParticipant.publishTrack(localAudioTrack, {
-        dtx: false,
-        source: Track.Source.Microphone,
-      });
-      
-      addLog("✅ Microphone active!");
-      addLog("🗣️ Speak in your configured language");
+      await room.localParticipant.publishTrack(localAudioTrack, { dtx: false, source: Track.Source.Microphone });
 
+      addLog("🌸 Say hello to Huma! ✨");
       setStatus("connected");
       setIsListening(true);
-      setDebugInfo("🌍 Language set in Convai Dashboard");
-
     } catch (e: any) {
-      addLog(`❌ ERROR: ${e.message}`);
+      addLog(`❌ ${e.message}`);
       setErr(e?.message || String(e));
       setStatus("error");
-      setIsListening(false);
-      setIsSpeaking(false);
-      
-      if (localTrackRef.current) {
-        localTrackRef.current.stop();
-        localTrackRef.current = null;
-      }
-      if (roomRef.current) {
-        roomRef.current.disconnect();
-        roomRef.current = null;
-      }
+      setIsListening(false); setIsSpeaking(false);
+      localTrackRef.current?.stop(); localTrackRef.current = null;
+      roomRef.current?.disconnect(); roomRef.current = null;
     }
   }
 
   async function stopCall() {
-    try {
-      addLog("🛑 Stopping call...");
-      
-      if (localTrackRef.current) {
-        localTrackRef.current.stop();
-        localTrackRef.current = null;
-      }
-
-      remoteAudioElements.current.forEach(el => {
-        el.pause();
-        el.remove();
-      });
-      remoteAudioElements.current = [];
-
-      if (roomRef.current) {
-        roomRef.current.disconnect();
-        roomRef.current = null;
-      }
-    } finally {
-      setStatus("idle");
-      setDebugInfo("");
-      setIsListening(false);
-      setIsSpeaking(false);
-      setDetectedLanguage("Waiting...");
-    }
+    addLog("🌙 Goodbye...");
+    localTrackRef.current?.stop(); localTrackRef.current = null;
+    remoteAudioElements.current.forEach((el) => { el.pause(); el.remove(); });
+    remoteAudioElements.current = [];
+    roomRef.current?.disconnect(); roomRef.current = null;
+    setStatus("idle"); setIsListening(false); setIsSpeaking(false);
+    setLastBotText(""); setLastUserText("");
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-100 p-4">
-      <div className="bg-white p-8 rounded-2xl shadow-2xl max-w-2xl w-full">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2 text-center">
-          Doha Bank Assistant
-        </h1>
-        <p className="text-gray-600 text-center mb-6">
-          🌍 Multilingual Auto-Detection
-        </p>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
 
-        <div className="space-y-4">
-          {/* Status Indicator */}
-          <div className="flex items-center justify-center gap-2 p-4 bg-gray-50 rounded-lg">
-            <div
-              className={`w-3 h-3 rounded-full ${
-                status === "connected"
-                  ? "bg-green-500 animate-pulse"
-                  : status === "connecting"
-                  ? "bg-yellow-500 animate-pulse"
-                  : status === "error"
-                  ? "bg-red-500"
-                  : "bg-gray-300"
-              }`}
-            />
-            <span className="text-sm font-medium text-gray-700 capitalize">
-              {status === "idle" ? "Ready" : status}
-            </span>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+          background: #0d0418;
+          font-family: 'Cormorant Garamond', Georgia, serif;
+          color: #f5d5e8;
+          overflow-x: hidden;
+        }
+
+        @keyframes petalFall {
+          0%   { transform: translateY(-5vh) rotate(0deg) translateX(0px); opacity: 0; }
+          10%  { opacity: 1; }
+          90%  { opacity: 0.6; }
+          100% { transform: translateY(105vh) rotate(540deg) translateX(60px); opacity: 0; }
+        }
+
+        @keyframes waveBar {
+          from { transform: scaleY(0.3); }
+          to   { transform: scaleY(1); }
+        }
+
+        @keyframes ringBreath {
+          0%, 100% { transform: scale(1);    opacity: 0.6; }
+          50%       { transform: scale(1.05); opacity: 0.3; }
+        }
+
+        @keyframes orbitCW  { from { transform: rotate(0deg);   } to { transform: rotate(360deg);  } }
+        @keyframes orbitCCW { from { transform: rotate(0deg);   } to { transform: rotate(-360deg); } }
+
+        @keyframes burstOut {
+          0%   { transform: scale(1);    opacity: 0.4; }
+          100% { transform: scale(1.28); opacity: 0; }
+        }
+
+        @keyframes fadeSlideUp {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes starTwinkle {
+          0%, 100% { opacity: 0.15; transform: scale(0.8); }
+          50%       { opacity: 0.8;  transform: scale(1.2); }
+        }
+
+        @keyframes gradientShift {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        @keyframes shimmerMove {
+          0%   { background-position: -300% center; }
+          100% { background-position: 300% center; }
+        }
+
+        .bubble-in { animation: fadeSlideUp 0.45s cubic-bezier(0.22,1,0.36,1) forwards; }
+
+        .btn-start {
+          background: linear-gradient(135deg, #e91e8c, #9c27b0, #e91e8c);
+          background-size: 200%;
+          animation: gradientShift 3s ease infinite;
+          border: none;
+          color: white;
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 1.15rem;
+          font-weight: 700;
+          letter-spacing: 0.14em;
+          padding: 15px 44px;
+          border-radius: 50px;
+          cursor: pointer;
+          position: relative;
+          overflow: hidden;
+          transition: transform 0.25s, box-shadow 0.25s;
+          text-transform: uppercase;
+        }
+        .btn-start::after {
+          content: '';
+          position: absolute; inset: 0;
+          background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+          background-size: 200%;
+          animation: shimmerMove 2.5s linear infinite;
+          border-radius: inherit;
+        }
+        .btn-start:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(233,30,140,0.55); }
+        .btn-start:active { transform: translateY(-1px); }
+        .btn-start:disabled { opacity: 0.5; cursor: not-allowed; transform: none; animation: none; background: #4a2060; }
+
+        .btn-end {
+          background: transparent;
+          border: 2px solid rgba(220,50,90,0.55);
+          color: #ff8fa8;
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 1.1rem;
+          font-weight: 600;
+          letter-spacing: 0.12em;
+          padding: 13px 40px;
+          border-radius: 50px;
+          cursor: pointer;
+          text-transform: uppercase;
+          transition: all 0.25s;
+        }
+        .btn-end:hover {
+          background: rgba(220,50,90,0.12);
+          border-color: rgba(220,50,90,0.85);
+          box-shadow: 0 0 24px rgba(220,50,90,0.3);
+          transform: translateY(-2px);
+        }
+      `}</style>
+
+      {/* ── Background ── */}
+      <div style={{ position: "fixed", inset: 0, zIndex: 0, overflow: "hidden", background: "radial-gradient(ellipse at 25% 20%, #1a0535 0%, #0d0418 50%, #0a021a 100%)" }}>
+        {/* Glow blobs */}
+        <div style={{ position: "absolute", top: "-15%", left: "-5%", width: 700, height: 700, background: "radial-gradient(circle, rgba(156,21,101,0.18) 0%, transparent 65%)", borderRadius: "50%" }} />
+        <div style={{ position: "absolute", bottom: "-20%", right: "-10%", width: 600, height: 600, background: "radial-gradient(circle, rgba(103,0,180,0.14) 0%, transparent 65%)", borderRadius: "50%" }} />
+        <div style={{ position: "absolute", top: "35%", left: "55%", width: 400, height: 400, background: "radial-gradient(circle, rgba(233,30,140,0.07) 0%, transparent 65%)", borderRadius: "50%" }} />
+
+        {/* Stars */}
+        {[...Array(35)].map((_, i) => (
+          <div key={i} style={{
+            position: "absolute",
+            left: `${(i * 37 + 11) % 100}%`,
+            top: `${(i * 53 + 7) % 100}%`,
+            width: (i % 3) + 1,
+            height: (i % 3) + 1,
+            borderRadius: "50%",
+            background: "white",
+            opacity: 0.1 + (i % 5) * 0.08,
+            animation: `starTwinkle ${2 + (i % 4)}s ease-in-out infinite`,
+            animationDelay: `${(i * 0.3) % 4}s`,
+          }} />
+        ))}
+
+        {/* Petals */}
+        {petals.map((p) => (
+          <Petal key={p.id} style={{
+            left: `${p.left}%`,
+            top: "-5%",
+            width: p.size,
+            height: p.size * 1.3,
+            opacity: p.opacity,
+            animation: `petalFall ${p.duration}s linear ${p.delay}s infinite`,
+          }} />
+        ))}
+      </div>
+
+      {/* ── Content ── */}
+      <div style={{ position: "relative", zIndex: 1, minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 16px" }}>
+
+        {/* Header */}
+        <div style={{ textAlign: "center", marginBottom: 28 }}>
+          <div style={{ fontFamily: "'Courier Prime', monospace", fontSize: 10.5, letterSpacing: "0.4em", color: "#6b3a5a", marginBottom: 10, textTransform: "uppercase" }}>
+            ✦ Portfolio Assistant ✦
+          </div>
+          <h1 style={{
+            fontSize: "clamp(2.2rem, 6vw, 3.4rem)",
+            fontWeight: 300,
+            fontStyle: "italic",
+            letterSpacing: "0.04em",
+            background: "linear-gradient(135deg, #ffd6e8 0%, #ff69b4 40%, #e91e8c 70%, #ffb3c6 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            lineHeight: 1.1,
+            marginBottom: 6,
+          }}>
+            Huma Shafique
+          </h1>
+          <p style={{ color: "#6b3a5a", fontSize: "1rem", fontStyle: "italic", letterSpacing: "0.08em" }}>
+            ask me anything, darling ♡
+          </p>
+        </div>
+
+        {/* Main Card */}
+        <div style={{
+          background: "rgba(18, 5, 35, 0.92)",
+          backdropFilter: "blur(28px)",
+          WebkitBackdropFilter: "blur(28px)",
+          border: "1px solid rgba(255,100,160,0.18)",
+          borderRadius: 32,
+          padding: "36px 28px 28px",
+          width: "100%",
+          maxWidth: 480,
+          boxShadow: "0 40px 100px rgba(0,0,0,0.75), 0 0 80px rgba(156,21,101,0.1), inset 0 1px 0 rgba(255,180,213,0.08)",
+          position: "relative",
+          overflow: "hidden",
+        }}>
+
+          {/* Top shimmer */}
+          <div style={{ position: "absolute", top: 0, left: "5%", right: "5%", height: 1, background: "linear-gradient(90deg, transparent, rgba(255,105,180,0.65), rgba(255,182,193,0.45), transparent)" }} />
+          {/* Corner accents */}
+          <div style={{ position: "absolute", top: 16, left: 16, width: 20, height: 20, borderTop: "1.5px solid rgba(255,100,160,0.35)", borderLeft: "1.5px solid rgba(255,100,160,0.35)", borderRadius: "4px 0 0 0" }} />
+          <div style={{ position: "absolute", top: 16, right: 16, width: 20, height: 20, borderTop: "1.5px solid rgba(255,100,160,0.35)", borderRight: "1.5px solid rgba(255,100,160,0.35)", borderRadius: "0 4px 0 0" }} />
+          <div style={{ position: "absolute", bottom: 16, left: 16, width: 20, height: 20, borderBottom: "1.5px solid rgba(255,100,160,0.2)", borderLeft: "1.5px solid rgba(255,100,160,0.2)", borderRadius: "0 0 0 4px" }} />
+          <div style={{ position: "absolute", bottom: 16, right: 16, width: 20, height: 20, borderBottom: "1.5px solid rgba(255,100,160,0.2)", borderRight: "1.5px solid rgba(255,100,160,0.2)", borderRadius: "0 0 4px 0" }} />
+
+          {/* ── Avatar ── */}
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 24, position: "relative" }}>
+            <div style={{ position: "relative", width: 220, height: 220 }}>
+
+              {/* Burst ring */}
+              {isSpeaking && (
+                <div style={{
+                  position: "absolute", inset: -22, borderRadius: "50%",
+                  border: "2px solid rgba(255,105,180,0.45)",
+                  animation: "burstOut 1.8s ease-out infinite",
+                }} />
+              )}
+
+              {/* Orbit 1 — CW */}
+              <div style={{
+                position: "absolute", inset: -10, borderRadius: "50%",
+                border: "1px dashed rgba(255,100,160,0.32)",
+                animation: `orbitCW ${isSpeaking ? "2.5s" : "7s"} linear infinite`,
+              }}>
+                <div style={{
+                  position: "absolute", top: -5, left: "50%", transform: "translateX(-50%)",
+                  width: 9, height: 9, borderRadius: "50%",
+                  background: isSpeaking ? "#ff69b4" : "rgba(255,105,180,0.45)",
+                  boxShadow: `0 0 ${isSpeaking ? "14px" : "6px"} #ff69b4`,
+                  transition: "all 0.5s",
+                }} />
+              </div>
+
+              {/* Orbit 2 — CCW */}
+              <div style={{
+                position: "absolute", inset: -26, borderRadius: "50%",
+                border: "1px solid rgba(156,21,101,0.18)",
+                animation: `orbitCCW ${isSpeaking ? "4s" : "11s"} linear infinite`,
+              }}>
+                <div style={{
+                  position: "absolute", bottom: -4, left: "50%", transform: "translateX(-50%)",
+                  width: 6, height: 6, borderRadius: "50%",
+                  background: "#9c1565", boxShadow: "0 0 8px #9c1565",
+                }} />
+              </div>
+
+              {/* Orbit 3 — CW slow */}
+              <div style={{
+                position: "absolute", inset: -10, borderRadius: "50%",
+                animation: `orbitCW ${isSpeaking ? "3.5s" : "10s"} linear infinite`,
+              }}>
+                <div style={{
+                  position: "absolute", left: -3, top: "50%", transform: "translateY(-50%)",
+                  width: 5, height: 5, borderRadius: "50%",
+                  background: "rgba(255,182,213,0.55)", boxShadow: "0 0 6px #ffb3c6",
+                }} />
+              </div>
+
+              {/* Main avatar circle */}
+              <div style={{
+                position: "absolute", inset: 0, borderRadius: "50%",
+                background: "radial-gradient(circle at 38% 32%, #1e0535, #0a0118)",
+                border: `1.5px solid ${isSpeaking ? "rgba(255,105,180,0.65)" : isListening ? "rgba(255,100,160,0.42)" : "rgba(80,10,50,0.4)"}`,
+                boxShadow: isSpeaking
+                  ? "0 0 40px rgba(255,105,180,0.35), inset 0 0 20px rgba(233,30,140,0.07)"
+                  : isListening
+                    ? "0 0 22px rgba(255,100,160,0.18)"
+                    : "0 0 20px rgba(0,0,0,0.5)",
+                animation: (isListening || isSpeaking) ? "ringBreath 2.2s ease-in-out infinite" : "none",
+                overflow: "hidden",
+                transition: "border-color 0.5s, box-shadow 0.5s",
+              }}>
+                <div style={{ transform: `translateY(${float}px)`, height: "100%", transition: "none" }}>
+                  <GirlAvatar isListening={isListening} isSpeaking={isSpeaking} status={status} />
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Language Detection Display */}
-          {/* {status === "connected" && (
-            <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-lg">
-              <div className="text-center">
-                <div className="text-xs font-semibold text-gray-600 mb-1">
-                  DETECTED LANGUAGE
-                </div>
-                <div className="text-xl font-bold text-blue-700">
-                  {detectedLanguage}
-                </div>
-              </div>
+          {/* Status pill */}
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 18 }}>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              padding: "6px 20px", borderRadius: 20,
+              background: "rgba(8,2,20,0.8)",
+              border: "1px solid rgba(255,100,160,0.15)",
+            }}>
+              <div style={{
+                width: 7, height: 7, borderRadius: "50%",
+                background: status === "connected" ? "#ff69b4" : status === "connecting" ? "#ffb3c6" : status === "error" ? "#f44" : "#3a1040",
+                boxShadow: status === "connected" ? "0 0 10px #ff69b4" : status === "connecting" ? "0 0 10px #ffb3c6" : "none",
+                animation: status === "connecting" ? "ringBreath 0.8s infinite" : "none",
+              }} />
+              <span style={{ fontFamily: "'Courier Prime', monospace", fontSize: 11, color: "#6b3a5a", letterSpacing: "0.08em" }}>
+                {status === "idle" ? "ready when you are" :
+                  status === "connecting" ? "waking up..." :
+                    status === "error" ? "something went wrong" :
+                      isSpeaking ? "huma is speaking ♪" :
+                        isListening ? "listening..." : "connected"}
+              </span>
             </div>
-          )} */}
+          </div>
 
-          {/* Audio Status */}
+          {/* Sound waves */}
           {status === "connected" && (
-            <div className="grid grid-cols-2 gap-3">
-              <div className={`p-3 rounded-lg border-2 transition-all ${isListening ? 'bg-blue-50 border-blue-400 shadow-lg' : 'bg-gray-50 border-gray-200'}`}>
-                <div className="text-center">
-                  <div className="text-2xl mb-1">🎤</div>
-                  <div className="text-xs font-medium text-gray-700">
-                    {isListening ? "Listening" : "Muted"}
-                  </div>
-                </div>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 28, marginBottom: 18 }}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
+                <SoundWave active={isListening} color1="#9c1565" color2="#ffb3c6" />
+                <span style={{ fontFamily: "'Courier Prime', monospace", fontSize: 9, color: "#4a2050", letterSpacing: "0.2em", textTransform: "uppercase" }}>you</span>
               </div>
-              <div className={`p-3 rounded-lg border-2 transition-all ${isSpeaking ? 'bg-green-50 border-green-400 shadow-lg animate-pulse' : 'bg-gray-50 border-gray-200'}`}>
-                <div className="text-center">
-                  <div className="text-2xl mb-1">🔊</div>
-                  <div className="text-xs font-medium text-gray-700">
-                    {isSpeaking ? "AI Speaking" : "Silent"}
-                  </div>
-                </div>
+              <div style={{ fontSize: 14, color: "rgba(255,100,160,0.25)" }}>✦</div>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
+                <SoundWave active={isSpeaking} color1="#e91e8c" color2="#ffd6e8" />
+                <span style={{ fontFamily: "'Courier Prime', monospace", fontSize: 9, color: "#4a2050", letterSpacing: "0.2em", textTransform: "uppercase" }}>huma</span>
               </div>
             </div>
           )}
 
-          {/* Debug Info */}
-          {debugInfo && (
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-xs text-blue-800 text-center font-medium">{debugInfo}</p>
+          {/* Bot speech bubble */}
+          {lastBotText && status === "connected" && (
+            <div className="bubble-in" style={{
+              marginBottom: 10, padding: "14px 18px",
+              background: "linear-gradient(135deg, rgba(233,30,140,0.08), rgba(103,0,180,0.07))",
+              border: "1px solid rgba(255,100,160,0.22)",
+              borderRadius: 18, borderTopLeftRadius: 6,
+            }}>
+              <div style={{ fontFamily: "'Courier Prime', monospace", fontSize: 9.5, color: "#ff69b4", letterSpacing: "0.15em", marginBottom: 5, textTransform: "uppercase" }}>♡ Huma</div>
+              <p style={{ fontSize: "0.97rem", color: "#f0d0e0", lineHeight: 1.6, fontStyle: "italic" }}>{lastBotText}</p>
             </div>
           )}
 
-          {/* Error Display */}
+          {/* User speech bubble */}
+          {lastUserText && status === "connected" && (
+            <div className="bubble-in" style={{
+              marginBottom: 20, padding: "14px 18px",
+              background: "rgba(60, 0, 45, 0.2)",
+              border: "1px solid rgba(156,21,101,0.22)",
+              borderRadius: 18, borderTopRightRadius: 6,
+              textAlign: "right",
+            }}>
+              <div style={{ fontFamily: "'Courier Prime', monospace", fontSize: 9.5, color: "#6b3a5a", letterSpacing: "0.15em", marginBottom: 5, textTransform: "uppercase" }}>you ♡</div>
+              <p style={{ fontSize: "0.97rem", color: "#d0afc0", lineHeight: 1.6 }}>{lastUserText}</p>
+            </div>
+          )}
+
+          {/* Error */}
           {err && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm text-red-800 break-words">
-                <strong>Error:</strong> {err}
-              </p>
+            <div style={{ marginBottom: 16, padding: "12px 16px", background: "rgba(180,0,50,0.12)", border: "1px solid rgba(180,0,50,0.35)", borderRadius: 12 }}>
+              <p style={{ fontSize: "0.88rem", color: "#f8a8b8" }}><strong>Error:</strong> {err}</p>
             </div>
           )}
 
-          {/* Session ID */}
-          {characterSessionId && (
-            <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
-              <p className="text-xs text-purple-800">
-                <strong>Session:</strong> {characterSessionId.slice(0, 30)}...
-              </p>
-            </div>
-          )}
+          {/* Buttons */}
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 20 }}>
+            {status !== "connected" ? (
+              <button className="btn-start" onClick={startCall} disabled={status === "connecting"}>
+                {status === "connecting" ? "✦ Connecting..." : "✦ Say Hello"}
+              </button>
+            ) : (
+              <button className="btn-end" onClick={stopCall}>✦ End Session</button>
+            )}
+          </div>
 
-          {/* Logs */}
-          {logs.length > 0 && (
-            <div className="p-3 bg-gray-900 text-green-400 rounded-lg font-mono text-xs max-h-64 overflow-y-auto">
+          {/* Language tags */}
+          <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
+            {["🇬🇧 English", "🇸🇦 Arabic", "🇵🇰 Urdu"].map((lang) => (
+              <span key={lang} style={{
+                fontFamily: "'Courier Prime', monospace", fontSize: 10,
+                padding: "4px 12px", borderRadius: 20,
+                border: "1px solid rgba(255,100,160,0.15)",
+                color: "#4a2050", letterSpacing: "0.05em",
+                background: "rgba(60,0,45,0.15)",
+              }}>{lang}</span>
+            ))}
+          </div>
+
+          {/* Log toggle */}
+          <div style={{ textAlign: "center" }}>
+            <button onClick={() => setShowLogs(!showLogs)} style={{ background: "none", border: "none", fontFamily: "'Courier Prime', monospace", fontSize: 10, color: "rgba(100,50,80,0.45)", cursor: "pointer", letterSpacing: "0.1em" }}>
+              {showLogs ? "▲ hide logs" : "▼ debug logs"}
+            </button>
+          </div>
+
+          {showLogs && logs.length > 0 && (
+            <div style={{ marginTop: 10, background: "#030110", borderRadius: 10, padding: "10px 12px", maxHeight: 150, overflowY: "auto", border: "1px solid rgba(60,0,45,0.3)" }}>
               {logs.map((log, i) => (
-                <div key={i} className="mb-1">{log}</div>
+                <div key={i} style={{ fontFamily: "'Courier Prime', monospace", fontSize: 10.5, color: i === logs.length - 1 ? "#7a3a5a" : "#2d1028", padding: "2px 0", borderBottom: "1px solid #0d0218" }}>
+                  {log}
+                </div>
               ))}
             </div>
           )}
 
-          {/* Call Controls */}
-          <div className="flex gap-3">
-            {status !== "connected" ? (
-              <button
-                onClick={startCall}
-                disabled={status === "connecting"}
-                className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:from-gray-400 disabled:to-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
-              >
-                {status === "connecting" ? "Connecting..." : "🎤 Start Call"}
-              </button>
-            ) : (
-              <button
-                onClick={stopCall}
-                className="flex-1 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
-              >
-                🔴 End Call
-              </button>
-            )}
-          </div>
-
-          {/* Usage Instructions */}
-          <div className="mt-6 p-4 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-lg">
-            <h3 className="text-sm font-bold text-amber-900 mb-3 text-center">
-              🌍 Multilingual Voice Assistant
-            </h3>
-            <ul className="text-xs text-amber-800 space-y-2">
-              <li className="flex items-start gap-2">
-                <span className="font-bold min-w-[20px]">1.</span>
-                <span><strong>Click "Start Call"</strong> to begin</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="font-bold min-w-[20px]">2.</span>
-                <span><strong>Speak naturally</strong> in Arabic (العربية), English, or Urdu (اردو)</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="font-bold min-w-[20px]">3.</span>
-                <span><strong>Language auto-detected</strong> - no need to specify</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="font-bold min-w-[20px]">4.</span>
-                <span><strong>AI responds</strong> in the same language you use</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="font-bold min-w-[20px]">5.</span>
-                <span>Check logs below to see detected language</span>
-              </li>
-            </ul>
-          </div>
+          {/* Bottom shimmer */}
+          <div style={{ position: "absolute", bottom: 0, left: "5%", right: "5%", height: 1, background: "linear-gradient(90deg, transparent, rgba(156,21,101,0.35), transparent)" }} />
         </div>
+
+        {/* Footer */}
+        <p style={{ marginTop: 22, fontFamily: "'Courier Prime', monospace", fontSize: 10, color: "rgba(70,30,55,0.5)", letterSpacing: "0.18em", textAlign: "center" }}>
+          CONVAI · LIVEKIT · NEXT.JS
+        </p>
       </div>
-    </div>
+    </>
   );
 }
